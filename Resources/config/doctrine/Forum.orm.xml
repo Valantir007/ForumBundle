@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+        xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+    
+    <entity name="Valantir\ForumBundle\Entity\Forum" table="valantir_forum" repository-class="Gedmo\Tree\Entity\Repository\NestedTreeRepository">
+        <indexes>
+            <index name="name_idx" columns="name"/>
+        </indexes>
+        
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        
+        <field name="left" column="lft" type="integer">
+            <gedmo:tree-left/>
+        </field>
+        <field name="right" column="rgt" type="integer">
+            <gedmo:tree-right/>
+        </field>
+        <field name="root" type="integer" nullable="true">
+            <gedmo:tree-root/>
+        </field>
+        <field name="level" column="lvl" type="integer">
+            <gedmo:tree-level/>
+        </field>
+        <field name="name" column="name" type="string" />
+        <field name="description" column="description" type="text" />
+        <field name="createdAt" column="created_at" type="datetime" />
+        <field name="updatedAt" column="updated_at" type="datetime" nullable="true" />
+        <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
+        
+        <many-to-one field="author" target-entity="User" inversed-by="forumCategories">
+            <join-column name="author_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+        
+        <one-to-many field="topics" target-entity="Topic" mapped-by="category">
+            <cascade>
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+        
+        <many-to-one field="parent" target-entity="Forum" inversed-by="children">
+            <join-column name="parent_id" referenced-column-name="id" on-delete="CASCADE"/>
+            <gedmo:tree-parent/>
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </many-to-one>
+        
+        <one-to-many field="children" target-entity="Forum" mapped-by="parent">
+            <cascade>
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+        
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist" />
+            <lifecycle-callback type="preUpdate" method="preUpdate" />
+        </lifecycle-callbacks>
+        
+        <gedmo:tree type="nested"/>
+        <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />
+    </entity>
+</doctrine-mapping>

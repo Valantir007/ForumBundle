@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="base.valantir.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="true" />
+        
+        <service id="manager.valantir.forum" class="Valantir\ForumBundle\Manager\ForumManager">
+            <argument type="service" id="base.valantir.entity_manager" />
+            <argument>Valantir\ForumBundle\Entity\Category</argument>
+        </service>
+        
+        <service id="manager.valantir.topic" class="Valantir\ForumBundle\Manager\TopicManager">
+            <argument type="service" id="base.valantir.entity_manager" />
+            <argument>Valantir\ForumBundle\Entity\Topic</argument>
+        </service>
+        
+        <service id="manager.valantir.post" class="Valantir\ForumBundle\Manager\PostManager">
+            <argument type="service" id="base.valantir.entity_manager" />
+            <argument>Valantir\ForumBundle\Entity\Post</argument>
+        </service>
+    </services>
+</container>

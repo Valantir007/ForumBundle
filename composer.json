@@ -1,0 +1,32 @@
+{
+    "name" : "valantir/forumbundle",
+    "description" : "Forum",
+    "type" : "symfony-bundle",
+    "homepage": "https://github.com/Valantir007/ForumBundle",
+    "authors" : [{
+        "name" : "Valantir",
+        "email" : "kamil.demurat@gmail.com"
+    }],
+    "keywords" : [
+        "forum","bundle","symfony2"
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+        "stof/doctrine-extensions-bundle": "1.2.*@dev"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "Valantir\\ForumBundle" : ""
+        }
+    },
+    "target-dir" : "Valantir/ForumBundle",
+    "repositories" : [{
+    }],
+    "extra" : {
+    "branch-alias" : {
+            "dev-master" : "1.0.0-dev"
+        }
+    }
+}

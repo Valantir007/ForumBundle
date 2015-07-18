@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+        xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+    
+    <entity name="Valantir\ForumBundle\Entity\Topic" table="valantir_forum_topic">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+        
+        <field name="name" column="name" type="string" />
+        <field name="description" column="description" type="text" />
+        <field name="createdAt" column="created_at" type="datetime" />
+        <field name="updatedAt" column="updated_at" type="datetime" nullable="true"/>
+        <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
+        
+        <many-to-one field="author" target-entity="User" inversed-by="forumTopics">
+            <join-column name="author_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+        
+        <many-to-one field="category" target-entity="Forum" inversed-by="topics" >
+            <join-column name="category_id" referenced-column-name="id" on-delete="CASCADE"/>
+            <cascade>
+                <cascade-persist />
+            </cascade>
+        </many-to-one>
+        
+        <one-to-many field="posts" target-entity="Post" mapped-by="topic">
+            <cascade>
+                <cascade-remove />
+            </cascade>
+        </one-to-many>
+        
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist" />
+            <lifecycle-callback type="preUpdate" method="preUpdate" />
+        </lifecycle-callbacks>
+    </entity>
+</doctrine-mapping>
