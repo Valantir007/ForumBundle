@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    
+    <services>        
+        <service id="entity_hidden" class="Valantir\ForumBundle\Form\Type\EntityHiddenType">
+            <tag name="form.type" alias="entity_hidden" />
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        
+        <service id="post_type" class="Valantir\ForumBundle\Form\Type\PostType">
+            <tag name="form.type" alias="post_type" />
+        </service>
+        
+        <service id="topic_type" class="Valantir\ForumBundle\Form\Type\TopicType">
+            <tag name="form.type" alias="topic_type" />
+        </service>
+        
+        <service id="forum_type" class="Valantir\ForumBundle\Form\Type\ForumType">
+            <tag name="form.type" alias="forum_type" />
+            <argument type="service" id="service_container"/>
+        </service>
+    </services>
+</container>

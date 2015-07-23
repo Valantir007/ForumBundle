@@ -1,0 +1,11 @@
+{% extends 'ValantirForumBundle::base.html.twig' %}
+
+{% block body %}
+    {% if posts %}
+        {{ include('ValantirForumBundle:Post/Admin:posts-list.html.twig', { 'posts': posts }) }}
+        <div class="navigation">
+            {{ knp_pagination_render(posts) }}
+        </div>
+    {% endif %}
+    {{ include('ValantirForumBundle:Post/Admin:post-form.html.twig', { 'form': postForm }) }}
+{% endblock %}

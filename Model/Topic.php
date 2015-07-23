@@ -23,7 +23,7 @@ class Topic {
     
     protected $deletedAt;
     
-    protected $category;
+    protected $forum;
     
     protected $posts;
     
@@ -61,12 +61,12 @@ class Topic {
         $this->updatedAt = $updatedAt;
     }
     
-    public function getCategory() {
-        return $this->category;
+    public function getForum() {
+        return $this->forum;
     }
 
-    public function setCategory($category) {
-        $this->category = $category;
+    public function setForum($forum) {
+        $this->forum = $forum;
     }
     
     public function getPosts() {

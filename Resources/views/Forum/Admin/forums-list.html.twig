@@ -1,0 +1,36 @@
+<table class="table table-bordered">
+    <tbody>
+        {% for forumData in forums %}
+            {% set forum = forumData[0] %}
+            <tr>
+                <td>
+                    <a href="{{ path('admin_forum_index', {'id': forum.id }) }}">{{ forum.name }}</a>
+                    <div class="small">
+                        {{ forum.description }}
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        {% transchoice forumData.topicsCount %}
+                            {0} there.are.no.topics|{1} there.is.one.topic|]1,4[ there.are.%count%.topics|[4,Inf[ there.are.%count%.topics
+                        {% endtranschoice %}
+                    </div>
+                    <div>
+                        {% transchoice forumData.postsCount %}
+                            {0} there.are.no.posts|{1} there.is.one.post|]1,Inf[ there.are.%count%.posts|[4,Inf[ there.are.%count%.posts
+                        {% endtranschoice %}
+                    </div>
+                </td>
+                <td>
+                    {% if lastPosts[forum.id] is defined %}
+                        {% trans with {'%author%': lastPosts[forum.id].author.username, '%date%': lastPosts[forum.id].createdAt|date('Y-m-d H:i:s')} %}
+                            last.post.send.by.%author%.on.%date%
+                        {% endtrans %}
+                    {% else %}
+                        {{ 'no.posts'|trans }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,37 @@
+<table class="table table-bordered">
+    <tbody>
+        {% for topicData in topics %}
+            {% set topic = topicData[0] %}
+            <tr>
+                <td>
+                    {% set page = (topicData.postsCount/10)|round(0,'ceil') %}
+                    {% if page > 1 %}
+                        <a href="{{ path('admin_post_index', {'topicId': topic.id, 'page': page }) }}">{{ topic.name }}</a>
+                    {% else %}
+                        <a href="{{ path('admin_post_index', {'topicId': topic.id}) }}">{{ topic.name }}</a>
+                    {% endif %}
+                    <div class="small">
+                        <div>{{ (topic.description) ? topic.description }}</div>
+                        <div>{{ 'created.by'|trans }}&nbsp;{{ topic.author.username }}</div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        {% transchoice topicData.postsCount %}
+                            {0} there.are.no.posts|{1} there.is.one.post|]1,Inf[ there.are.%count%.posts|[4,Inf[ there.are.%count%.posts
+                        {% endtranschoice %}
+                    </div>
+                </td>
+                <td>
+                    {% if lastPosts[topic.id] is defined %}
+                        {% trans with {'%author%': lastPosts[topic.id].author.username, '%date%': lastPosts[topic.id].createdAt|date('Y-m-d H:i:s')} %}
+                            last.post.send.by.%author%.on.%date%
+                        {% endtrans %}
+                    {% else %}
+                        {{ 'no.posts'|trans }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

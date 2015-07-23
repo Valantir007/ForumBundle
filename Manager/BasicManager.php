@@ -56,4 +56,8 @@ abstract class BasicManager{
     public function findOneBy($values) {
         return $this->repository->findOneBy($values);
     }
+    
+    public function find($id) {
+        return $this->repository->find($id);
+    }
 }

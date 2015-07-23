@@ -1,0 +1,18 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('bundles/valantirforum/plugin/wysibb/theme/default/wbbtheme.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/valantirforum/css/forum.css') }}">
+{% endblock %}
+            
+{% block body %}{% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="{{ asset('bundles/valantirforum/plugin/wysibb/jquery.wysibb.min.js') }}"></script>
+    <script src="{{ asset('bundles/valantirforum/plugin/wysibb/lang/' ~ app.request.getLocale() ~ '.js') }}"></script>
+    <script src="{{ asset('bundles/valantirforum/js/admin-forum.js') }}"></script>
+{% endblock javascripts %}

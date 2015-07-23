@@ -10,17 +10,17 @@
         </id>
         
         <field name="name" column="name" type="string" />
-        <field name="description" column="description" type="text" />
+        <field name="description" column="description" type="text" nullable="true" />
         <field name="createdAt" column="created_at" type="datetime" />
         <field name="updatedAt" column="updated_at" type="datetime" nullable="true"/>
         <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
         
-        <many-to-one field="author" target-entity="User" inversed-by="forumTopics">
+        <many-to-one field="author" target-entity="User" inversed-by="topics">
             <join-column name="author_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
         
-        <many-to-one field="category" target-entity="Forum" inversed-by="topics" >
-            <join-column name="category_id" referenced-column-name="id" on-delete="CASCADE"/>
+        <many-to-one field="forum" target-entity="Forum" inversed-by="topics" >
+            <join-column name="forum_id" referenced-column-name="id" on-delete="CASCADE"/>
             <cascade>
                 <cascade-persist />
             </cascade>

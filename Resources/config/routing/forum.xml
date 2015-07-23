@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="forum" path="/">
+        <default key="_controller">ValantirForumBundle:Forum:index</default>
+    </route>
+
+    <route id="forum_show" path="/{id}/show">
+        <default key="_controller">ValantirForumBundle:Forum:show</default>
+    </route>
+
+    <route id="forum_new" path="/new">
+        <default key="_controller">ValantirForumBundle:Forum:new</default>
+    </route>
+
+    <route id="forum_create" path="/create" methods="POST">
+        <default key="_controller">ValantirForumBundle:Forum:create</default>
+    </route>
+
+    <route id="forum_edit" path="/{id}/edit">
+        <default key="_controller">ValantirForumBundle:Forum:edit</default>
+    </route>
+
+    <route id="forum_update" path="/{id}/update" methods="POST|PUT">
+        <default key="_controller">ValantirForumBundle:Forum:update</default>
+    </route>
+
+    <route id="forum_delete" path="/{id}/delete" methods="POST|DELETE">
+        <default key="_controller">ValantirForumBundle:Forum:delete</default>
+    </route>
+
+</routes>

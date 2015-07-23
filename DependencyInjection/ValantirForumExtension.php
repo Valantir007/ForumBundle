@@ -24,8 +24,11 @@ class ValantirForumExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
-        $loader->load('doctrine-listener.xml');
+        $loader->load('doctrine.xml');
         $loader->load('managers.xml');
+        $loader->load('forms.xml');
+        $loader->load('twig.xml');
+        $loader->load('parsers.xml');
         
         $container->setParameter('valantir_forum', $config);
     }

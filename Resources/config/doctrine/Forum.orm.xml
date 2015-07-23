@@ -31,11 +31,11 @@
         <field name="updatedAt" column="updated_at" type="datetime" nullable="true" />
         <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
         
-        <many-to-one field="author" target-entity="User" inversed-by="forumCategories">
+        <many-to-one field="author" target-entity="User" inversed-by="forums">
             <join-column name="author_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
         
-        <one-to-many field="topics" target-entity="Topic" mapped-by="category">
+        <one-to-many field="topics" target-entity="Topic" mapped-by="forum">
             <cascade>
                 <cascade-remove />
             </cascade>

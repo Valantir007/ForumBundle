@@ -9,7 +9,7 @@
         
         <service id="manager.valantir.forum" class="Valantir\ForumBundle\Manager\ForumManager">
             <argument type="service" id="base.valantir.entity_manager" />
-            <argument>Valantir\ForumBundle\Entity\Category</argument>
+            <argument>Valantir\ForumBundle\Entity\Forum</argument>
         </service>
         
         <service id="manager.valantir.topic" class="Valantir\ForumBundle\Manager\TopicManager">

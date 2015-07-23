@@ -1,0 +1,10 @@
+{% extends 'ValantirForumBundle::base.html.twig' %}
+
+{% block body %}
+    {% if topics %}
+        {{ include('ValantirForumBundle:Topic/Admin:topics-list.html.twig', { 'topics': topics }) }}
+        <div class="navigation">
+            {{ knp_pagination_render(topics) }}
+        </div>
+    {% endif %}
+{% endblock %}

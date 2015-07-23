@@ -4,5 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    
+    <route id="admin_post_index" path="/{topicId}">
+        <default key="_controller">ValantirForumBundle:AdminPost:index</default>
+        <requirement key="topicId">\d+</requirement>
+    </route>
 </routes>
