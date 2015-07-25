@@ -1,0 +1,19 @@
+{% extends 'ValantirForumBundle::base.html.twig' %}
+
+{% block title %}
+    {{ topic.name }}
+{% endblock title %}
+
+{% block metadescription %}
+    <meta name="description" content="{{ topic.name }}">
+{% endblock metadescription %}
+
+{% block body %}
+    {% if posts %}
+        {{ include('ValantirForumBundle:Post/Admin:posts-list.html.twig', { 'posts': posts }) }}
+        <div class="navigation">
+            {{ knp_pagination_render(posts, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
+        </div>
+    {% endif %}
+    {{ include('ValantirForumBundle:Post/Admin:post-form.html.twig', { 'form': postForm }) }}
+{% endblock %}

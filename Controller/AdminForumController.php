@@ -24,20 +24,20 @@ class AdminForumController extends Controller
     /**
      * List of forums with topic and forum forms
      */
-    public function indexAction($id = null)
+    public function indexAction($slug = null)
     {
-        $forumsQuery = $this->getForumManager()->findForums(($id) ? $id : null); //we create query and pass to paginator
+        $forumsQuery = $this->getForumManager()->findForums(($slug) ? $slug : null); //we create query and pass to paginator
+        $currentForum = $this->getForumManager()->findOneBy(array('slug' => $slug));
         
         $forum = new Forum();
         $forumForm = $this->createForm('forum_type', $forum);
         
         $topic = new Topic();
-        $topicForum = $this->getForumManager()->find($id);
-        $topic->setForum($topicForum);
+        $topic->setForum($currentForum);
         $topicForm = $this->createForm('topic_type', $topic);
 
-        $this->addForum($forumForm, $forum, $id); //call method to add forum
-        $this->addTopic($topicForm, $topic, $id); //call method to add topic
+        $this->addForum($forumForm, $forum, ($currentForum) ? $currentForum->getId() : null); //call method to add forum
+        $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
         
         $pagination = $this->paginator->paginate(
             $forumsQuery,
@@ -55,9 +55,9 @@ class AdminForumController extends Controller
         return $this->render('ValantirForumBundle:Forum/Admin:index.html.twig', array(
             'forums' => $pagination,
             'forumForm' => $forumForm->createView(),
-            'topicForm' => ($id) ? $topicForm->createView() : null,
+            'topicForm' => ($currentForum && $currentForum->getId()) ? $topicForm->createView() : null,
             'lastPosts' => $lastPosts,
-            'forumId' => $id
+            'forumId' => ($currentForum) ? $currentForum->getId() : null
         ));
     }
 

@@ -9,12 +9,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class PostType extends AbstractType {
     
+    protected $container;
+    
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
             ->add('description', null, array(
+                'label' => false,
                 'required' => false,
                 'attr' => array(
-                    'class' => 'bb-editor'
+                    'class' => 'bb-editor',
+                    'data-locale' => $this->container->get('request')->getLocale()
                 )
             ))
             ->add('save', 'submit')

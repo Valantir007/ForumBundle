@@ -35,7 +35,7 @@ class ForumType extends AbstractType {
     }
 
     public function getParentEntity() {
-        return $this->container->get('manager.valantir.forum')->find($this->container->get('request')->get('id'));
+        return $this->container->get('manager.valantir.forum')->findOneBy(array('slug' => ($this->container->get('request')->get('slug'))));
     }
     
     public function configureOptions(OptionsResolver $resolver) {

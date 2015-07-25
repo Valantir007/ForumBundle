@@ -15,6 +15,8 @@ class Topic {
     
     protected $name;
     
+    protected $slug;
+    
     protected $description;
     
     protected $createdAt;
@@ -40,6 +42,10 @@ class Topic {
     public function getName() {
         return $this->name;
     }
+    
+    public function getSlug() {
+        return $this->slug;
+    }
 
     public function getCreatedAt() {
         return $this->createdAt;
@@ -51,6 +57,10 @@ class Topic {
 
     public function setName($name) {
         $this->name = $name;
+    }
+    
+    public function setSlug($slug) {
+        $this->slug = $slug;
     }
 
     public function setCreatedAt($createdAt) {

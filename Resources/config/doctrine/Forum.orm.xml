@@ -25,11 +25,14 @@
         <field name="level" column="lvl" type="integer">
             <gedmo:tree-level/>
         </field>
-        <field name="name" column="name" type="string" />
+        <field name="name" column="name" type="string" length="255" />
         <field name="description" column="description" type="text" />
         <field name="createdAt" column="created_at" type="datetime" />
         <field name="updatedAt" column="updated_at" type="datetime" nullable="true" />
         <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
+        <field name="slug" type="string" length="255" unique="true">
+            <gedmo:slug unique="true" updatable="true" separator="-" fields="name" />
+        </field>
         
         <many-to-one field="author" target-entity="User" inversed-by="forums">
             <join-column name="author_id" referenced-column-name="id" on-delete="CASCADE"/>

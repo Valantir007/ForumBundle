@@ -1,20 +1,39 @@
-<h1>{{ posts|first.topic.name }}</h1>
-<table class="table table-bordered">
-    <tbody>
-        {% for post in posts %}
-            <tr>
-                <td>
-                    <div class="small">
-                        {{ post.author.username }}
-                        <div>{{ post.createdAt|date('Y-m-d H:i:s') }}</div>
+<h3>{{ posts|first.topic.name }}</h3>
+
+<div class="display-table">
+    <div class="row hidden-xs hidden-sm forum-row">
+        <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
+            {{ 'author'|trans }}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-10 forum-col">
+            {{ 'topic:'|trans }}&nbsp;{{ posts|first.topic.name }}
+        </div>
+    </div>
+</div>
+
+<div class="display-table">
+    {% for post in posts %}
+        <div class="row forum-row">
+            <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
+                <div class="small">
+                    {{ post.author.username }}
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-10 forum-col">
+                <div class="row post-header">
+                    <div class="col-xs-12">
+                        {{ post.createdAt|date('Y-m-d H:i:s') }}
                     </div>
-                </td>
-                <td>
-                    <div class="bb2html">
-                        {{ post.description|bb2html|raw }}
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="bb2html">
+                            <a href="{{ path('admin_topic_show_quotation', {'slug': topic.slug, 'quotationPostId': post.id, 'page': page}) }}" rel="nofollow" class="pull-right">{{ 'quote'|trans }}</a>
+                            {{ post.description|bb2html|raw }}
+                        </div>        
+                    </div>        
+                </div>        
+            </div>
+        </div>
+    {% endfor %}
+</div>

@@ -14,6 +14,8 @@ class Forum {
     
     protected $name;
     
+    protected $slug;
+    
     protected $left;
     
     protected $level;
@@ -50,6 +52,10 @@ class Forum {
     public function getName() {
         return $this->name;
     }
+    
+    public function getSlug() {
+        return $this->slug;
+    }
 
     public function getCreatedAt() {
         return $this->createdAt;
@@ -61,6 +67,10 @@ class Forum {
 
     public function setName($name) {
         $this->name = $name;
+    }
+
+    public function setSlug($slug) {
+        $this->slug = $slug;
     }
 
     public function setCreatedAt($createdAt) {

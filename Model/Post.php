@@ -63,7 +63,7 @@ class Post {
     }
 
     public function setDescription($description) {
-        $this->description = $description;
+        $this->description = strip_tags($description);
     }
 
     public function getDeletedAt() {

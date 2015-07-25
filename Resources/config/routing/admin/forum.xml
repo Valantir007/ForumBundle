@@ -4,9 +4,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="admin_forum_index" path="/{id}">
+    <route id="admin_forum_index" path="/{slug}">
         <default key="_controller">ValantirForumBundle:AdminForum:index</default>
-        <default key="id"></default>
-        <requirement key="id">\d+</requirement>
+        <default key="slug"></default>
+<!--        <requirement key="id">\d+</requirement>-->
     </route>
 </routes>

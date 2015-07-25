@@ -45,4 +45,4 @@ w pliku mapowania należy wkleić poniższy kod:
 <one-to-many field="topics" target-entity="Valantir\ForumBundle\Entity\Topic" mapped-by="author" />
 <one-to-many field="posts" target-entity="Valantir\ForumBundle\Entity\Post" mapped-by="author" />
 
-należy zainstalować rozszrzenie php_bbcode stąd https://pecl.php.net/package/bbcode
+należy zainstalować rozszerzenie php_bbcode stąd https://pecl.php.net/package/bbcode

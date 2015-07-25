@@ -12,6 +12,7 @@
         
         <service id="post_type" class="Valantir\ForumBundle\Form\Type\PostType">
             <tag name="form.type" alias="post_type" />
+            <argument type="service" id="service_container"/>
         </service>
         
         <service id="topic_type" class="Valantir\ForumBundle\Form\Type\TopicType">
