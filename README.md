@@ -58,7 +58,7 @@ Jeśli uzywasz bundle'a FOSUserBundle i przez to nie mozesz rozszerzyc juz klasy
  wystarczy, ze skopiujesz klase FOS\UserBundle\Model\User do swojej ze wszystkimi zaleznosciami 
 lub skopiujesz wlasciwosci i metody klasy Valantir\ForumBundle\Entity\User
 
-w pliku mapowania należy wkleić poniższy kod:
+w pliku mapowania usera, należy wkleić poniższy kod:
 
 <one-to-many field="forums" target-entity="Valantir\ForumBundle\Entity\Forum" mapped-by="author" />
 <one-to-many field="topics" target-entity="Valantir\ForumBundle\Entity\Topic" mapped-by="author" />

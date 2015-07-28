@@ -1,6 +1,6 @@
 <?php
 
-namespace Valantir\ForumBundle\Parser;
+namespace Valantir\ForumBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

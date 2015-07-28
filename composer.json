@@ -16,8 +16,7 @@
     "require" : {
         "stof/doctrine-extensions-bundle": "1.2.*@dev",
         "jms/di-extra-bundle": "dev-master",
-        "knplabs/knp-paginator-bundle": "~2.4",
-        "ext-bbcode": "*"
+        "knplabs/knp-paginator-bundle": "~2.4"
     },
     "autoload" : {
         "psr-0" : {
