@@ -19,6 +19,12 @@ class AdminTopicController extends Controller
     
     protected $paginator;
     
+    /**
+     * List of topics in forum by forum id
+     * 
+     * @param int $forumId
+     * @return Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction($forumId) {
         $topicsQuery = $this->getTopicManager()->findTopicsByForum($forumId);
         
@@ -45,19 +51,22 @@ class AdminTopicController extends Controller
      * 
      * @param int $topicId
      * @param int $quotationPostId
-     * @return Response
+     * @return Symfony\Component\HttpFoundation\Response
      * @throws Exception
      */
     public function showTopicAction($slug, $quotationPostId = null) {
         $topic = $this->getTopicManager()->findOneBy(array('slug' => $slug));
         
         if(!$topic) {
-            throw $this->createNotFoundException(sprintf('Topic with id %s does not exists', $topicId));
+            throw $this->createNotFoundException(sprintf('Topic with slug %s does not exists', $slug));
         }
         
-        $postsQuery = $this->getPostManager()->findPostsByTopic($topic->getId());
-        
-        $post = new Post();
+        $editingPost = $this->request->attributes->get('editPost', null);
+        if($editingPost) {
+            $post = $this->getPostManager()->find($editingPost); 
+        } else {
+            $post = new Post();
+        }
         
         if($quotationPostId) {
             $quotationPost = $this->getPostManager()->find($quotationPostId);
@@ -87,7 +96,7 @@ class AdminTopicController extends Controller
             
             $templateParameters = array('slug' => $topic->getSlug());
             //we check page and if page > 1 then add page parameter to route
-            $page = ceil($this->getPostManager()->countPostsInTopic($topicId)/10);
+            $page = ceil($this->getPostManager()->countPostsInTopic($topic->getId())/10);
             if($page > 1) {
                 $templateParameters['page'] = $page;
             }
@@ -95,9 +104,11 @@ class AdminTopicController extends Controller
             return $this->redirect($this->generateUrl('admin_topic_show', $templateParameters));
         }
         
+        $postsQuery = $this->getPostManager()->findPostsByTopic($topic->getId());
+//        echo($postsQuery->getSql());die;
         $pagination = $this->paginator->paginate(
             $postsQuery,
-            $this->request->query->getInt('page', 1),
+            $this->request->get('page', 1),
             10
         );
 
@@ -105,7 +116,8 @@ class AdminTopicController extends Controller
             'posts' => $pagination,
             'postForm' => $postForm->createView(),
             'topic' => $topic,
-            'page' => $this->request->get('page', 1)
+            'page' => $this->request->get('page', 1),
+            'editingPost' => $editingPost
         ));
     }
     

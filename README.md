@@ -28,11 +28,30 @@ stof_doctrine_extensions:
             sortable: true
             tree: true
 
+services:
+    gedmo.listener.softdeleteable:
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ @annotation_reader ] ]
+
+doctrine:
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
+
+-więcej na stronie rozszerzenia https://github.com/Atlantic18/DoctrineExtensions
+
 ValantirForumBundle wymaga tree, softdeleteable, sortable oraz sluggable
 tree - fora i podfora
 softdeleteable - miekkie usuwanie postow, topicow i forow
 sortable - sortowanie watkow, postow i forow po polu position
-sluggable - tworzenie slugow po tytulach forow, topicow i postow
+sluggable - tworzenie slugow po tytulach forow i topicow
 
 Klasa usera musi implementowac interfejs Valantir\ForumBundle\Entity\UserInterface oraz rozszerzac klase Valantir\ForumBundle\Entity\User
 Jeśli uzywasz bundle'a FOSUserBundle i przez to nie mozesz rozszerzyc juz klasy Usera z ForumBundle,

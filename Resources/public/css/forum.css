@@ -36,6 +36,10 @@
     border-bottom: 1px solid #ddd;
 }
 
+.post-content {
+    margin-bottom: 21px;
+}
+
 .forum-row:first-child .forum-col:first-child {
     border-top-left-radius: 5px;
 }
@@ -50,4 +54,8 @@
 
 .forum-row:last-child .forum-col:last-child {
     border-bottom-right-radius: 5px;
+}
+
+.nav-tabs {
+    margin-bottom: 10px;
 }

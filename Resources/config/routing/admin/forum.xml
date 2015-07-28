@@ -7,6 +7,5 @@
     <route id="admin_forum_index" path="/{slug}">
         <default key="_controller">ValantirForumBundle:AdminForum:index</default>
         <default key="slug"></default>
-<!--        <requirement key="id">\d+</requirement>-->
     </route>
 </routes>

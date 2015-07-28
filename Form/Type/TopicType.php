@@ -12,12 +12,22 @@ class TopicType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
             ->add('name', null, array(
-                'required' => false
+                'required' => false,
+                'label' => false,
+                'attr' => array(
+                    'placeholder' => 'placeholder.name'
+                )
             ))
             ->add('description', null, array(
-                'required' => false
+                'required' => false,
+                'label' => false,
+                'attr' => array(
+                    'placeholder' => 'placeholder.description'
+                )
             ))
-            ->add('save', 'submit')
+            ->add('save', 'submit', array(
+                'label' => 'label.save'
+            ))
         ;
     }
     

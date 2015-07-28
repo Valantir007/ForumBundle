@@ -78,6 +78,7 @@ class PostManager extends BasicManager {
      */
     public function findPostsByTopic($topicId) {
         $qb = $this->repository->createQueryBuilder('p');
+        
         $qb->select('p', 't', 'u')
             ->leftJoin('p.author', 'u')
             ->leftJoin('p.topic', 't')
@@ -86,6 +87,7 @@ class PostManager extends BasicManager {
             ->addOrderBy('p.createdAt', 'ASC');
         
         $query = $qb->getQuery();
+        
         return $query;
     }
     

@@ -23,6 +23,9 @@ class AdminForumController extends Controller
     
     /**
      * List of forums with topic and forum forms
+     * 
+     * @param string $slug
+     * @return Symfony\Component\HttpFoundation\Response
      */
     public function indexAction($slug = null)
     {

@@ -10,14 +10,10 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
                 <div>
-                    {% transchoice forumData.topicsCount %}
-                        {0} there.are.no.topics|{1} there.is.one.topic|]1,4[ there.are.%count%.topics|[4,Inf[ there.are.%count%.topics
-                    {% endtranschoice %}
+                    {{ 'topics.count'|transchoice(forumData.topicsCount) }}
                 </div>
                 <div>
-                    {% transchoice forumData.postsCount %}
-                        {0} there.are.no.posts|{1} there.is.one.post|]1,Inf[ there.are.%count%.posts|[4,Inf[ there.are.%count%.posts
-                    {% endtranschoice %}
+                    {{ 'posts.count'|transchoice(forumData.postsCount) }}
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 forum-col">

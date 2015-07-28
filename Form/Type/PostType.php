@@ -25,7 +25,9 @@ class PostType extends AbstractType {
                     'data-locale' => $this->container->get('request')->getLocale()
                 )
             ))
-            ->add('save', 'submit')
+            ->add('save', 'submit', array(
+                'label' => 'label.save'
+            ))
         ;
     }
     

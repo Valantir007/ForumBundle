@@ -3,10 +3,10 @@
 <div class="display-table">
     <div class="row hidden-xs hidden-sm forum-row">
         <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
-            {{ 'author'|trans }}
+            {{ 'header.author'|trans }}
         </div>
         <div class="col-xs-12 col-sm-12 col-md-10 forum-col">
-            {{ 'topic:'|trans }}&nbsp;{{ posts|first.topic.name }}
+            {{ 'header.topic'|trans }}:&nbsp;{{ posts|first.topic.name }}
         </div>
     </div>
 </div>
@@ -25,10 +25,16 @@
                         {{ post.createdAt|date('Y-m-d H:i:s') }}
                     </div>
                 </div>
-                <div class="row">
+                <div class="row post-content">
                     <div class="col-xs-12">
                         <div class="bb2html">
-                            <a href="{{ path('admin_topic_show_quotation', {'slug': topic.slug, 'quotationPostId': post.id, 'page': page}) }}" rel="nofollow" class="pull-right">{{ 'quote'|trans }}</a>
+                            <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Large button group">
+                                <a href="{{ path('admin_topic_show_quotation', {'slug': topic.slug, 'quotationPostId': post.id, 'page': page}) }}" rel="nofollow" class="btn btn-default">{{ 'action.quote'|trans }}</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="{{ path('admin_post_edit', {'id': post.id, 'page': page}) }}" rel="nofollow" class="btn btn-default">{{ 'action.edit'|trans }}</a>
+                                    <a href="{{ path('admin_post_remove', {'id': post.id}) }}" rel="nofollow" class="btn btn-default">{{ 'action.remove'|trans }}</a>
+                                {% endif %}
+                            </div>
                             {{ post.description|bb2html|raw }}
                         </div>        
                     </div>        

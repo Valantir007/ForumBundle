@@ -16,9 +16,7 @@
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
                 <div>
-                    {% transchoice topicData.postsCount %}
-                        {0} there.are.no.posts|{1} there.is.one.post|]1,Inf[ there.are.%count%.posts|[4,Inf[ there.are.%count%.posts
-                    {% endtranschoice %}
+                    {{ 'posts.count'|transchoice(topicData.postsCount) }}
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4 forum-col">

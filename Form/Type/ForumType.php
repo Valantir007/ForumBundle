@@ -19,10 +19,18 @@ class ForumType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
             ->add('name', null, array(
-                'required' => false
+                'required' => false,
+                'label' => false,
+                'attr' => array(
+                    'placeholder' => 'placeholder.name'
+                )
             ))
             ->add('description', null, array(
-                'required' => false
+                'required' => false,
+                'label' => false,
+                'attr' => array(
+                    'placeholder' => 'placeholder.description'
+                )
             ))
             ->add('parent', 'entity_hidden', array(
                 'class' => 'Valantir\ForumBundle\Entity\Forum',
@@ -30,7 +38,9 @@ class ForumType extends AbstractType {
                 'data_class' => null,
                 'required' => false
             ))
-            ->add('save', 'submit')
+            ->add('save', 'submit', array(
+                'label' => 'label.save'
+            ))
         ;
     }
 
