@@ -18,7 +18,7 @@ class ForumManager extends BasicManager {
     public function findForums($parentSlug = null) {
         
         $qb = $this->repository->createQueryBuilder('f');
-        $qb->select('f', 't', 'p.createdAt', 'COUNT(t) as topicsCount', 'COUNT(p) as postsCount')
+        $qb->select('f', 't', 'p.createdAt', 'COUNT(DISTINCT t) as topicsCount', 'COUNT(DISTINCT p) as postsCount')
             ->leftJoin('f.topics', 't')
             ->leftJoin('t.posts', 'p')
             ->leftJoin('f.parent', 'fp')
