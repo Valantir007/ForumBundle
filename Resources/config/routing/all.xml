@@ -4,10 +4,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
     
-    <import resource="@ValantirForumBundle/Resources/config/routing/admin/forum.xml" prefix="/admin/forum" />
-    <import resource="@ValantirForumBundle/Resources/config/routing/admin/topic.xml" prefix="/admin/forum/topic"/>
-    <import resource="@ValantirForumBundle/Resources/config/routing/admin/post.xml" prefix="/admin/forum/post" />
-    
     <import resource="@ValantirForumBundle/Resources/config/routing/basic/forum.xml" prefix="/forum" />
     <import resource="@ValantirForumBundle/Resources/config/routing/basic/topic.xml" prefix="/forum/topic"/>
     <import resource="@ValantirForumBundle/Resources/config/routing/basic/post.xml" prefix="/forum/post" />

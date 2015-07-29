@@ -4,5 +4,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="post_edit" path="/{id}/edit/{page}/page">
+        <default key="_controller">ValantirForumBundle:Post:edit</default>
+        <requirement key="id">\d+</requirement>
+        <default key="page"></default>
+        <requirement key="page">\d+</requirement>
+    </route>
     
+    <route id="post_remove" path="/{id}/remove">
+        <default key="_controller">ValantirForumBundle:Post:removePost</default>
+        <requirement key="id">\d+</requirement>
+    </route>
 </routes>

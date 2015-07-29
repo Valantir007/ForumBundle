@@ -4,5 +4,17 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
+    <route id="topic_index" path="/list/{forumId}">
+        <default key="_controller">ValantirForumBundle:Topic:index</default>
+        <requirement key="forumId">\d+</requirement>
+    </route>
     
+    <route id="topic_show_quotation" path="/{slug}/quotation/{quotationPostId}">
+        <default key="_controller">ValantirForumBundle:Topic:showTopic</default>
+        <default key="quotationPostId"></default>
+    </route>
+
+    <route id="topic_show" path="/{slug}">
+        <default key="_controller">ValantirForumBundle:Topic:showTopic</default>
+    </route>
 </routes>

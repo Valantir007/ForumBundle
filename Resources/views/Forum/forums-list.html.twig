@@ -3,7 +3,7 @@
         {% set forum = forumData[0] %}
         <div class="row forum-row">
             <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
-                <a href="{{ path('admin_forum_index', {'slug': forum.slug }) }}">{{ forum.name }}</a>
+                <a href="{{ path('forum_index', {'slug': forum.slug }) }}">{{ forum.name }}</a>
                 <div class="small">
                     {{ forum.description }}
                 </div>

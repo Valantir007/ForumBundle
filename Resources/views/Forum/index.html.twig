@@ -1,0 +1,42 @@
+{% extends 'ValantirForumBundle::base.html.twig' %}
+
+{% block body %}
+    {% if forums %}
+        {{ include('ValantirForumBundle:Forum:forums-list.html.twig', { 'forums': forums }) }}
+        <div class="navigation">
+            {{ knp_pagination_render(forums) }}
+        </div>
+    {% endif %}
+    {{ render(controller('ValantirForumBundle:Topic:index', { 'forumId': forumId })) }}
+    {% set isAdmin = is_granted('ROLE_FORUM_ADMIN') %}
+    {% if isAdmin or topicForm %}
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                {% set isValidForumForm = (forumForm is not null) ? forumForm.vars.valid : null %}
+                {% set isValidTopicForm = (topicForm) ? topicForm.vars.valid : true %}
+                {% if isAdmin %}
+                    <li role="presentation" class="{{ ((isValidForumForm and isValidTopicForm) or (not isValidForumForm)) ? 'active' }}">
+                        <a href="#add-forum" aria-controls="add-forum" role="tab" data-toggle="tab">{{ 'tab.add.forum'|trans }}</a>
+                    </li>
+                {% endif %}
+                {% if topicForm %}
+                    <li role="presentation" class="{{ not isValidTopicForm or not is_granted('ROLE_FORUM_ADMIN') ? 'active' }}">
+                        <a href="#add-topic" aria-controls="add-topic" role="tab" data-toggle="tab">{{ 'tab.add.topic'|trans }}</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <div class="tab-content">
+                {% if isAdmin %}
+                    <div role="tabpanel" class="tab-pane {{ ((isValidForumForm and isValidTopicForm) or (not isValidForumForm)) ? 'active' : 'fade' }}" id="add-forum">
+                        {{ include('ValantirForumBundle:Forum:forum-form.html.twig', { 'form': forumForm }) }}
+                    </div>
+                {% endif %}
+                {% if topicForm %}
+                    <div role="tabpanel" class="tab-pane {{ not isValidTopicForm or not is_granted('ROLE_FORUM_ADMIN') ? 'active' : 'fade' }}" id="add-topic">
+                        {{ include('ValantirForumBundle:Topic:topic-form.html.twig', { 'form': topicForm }) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

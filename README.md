@@ -65,3 +65,10 @@ w pliku mapowania usera, należy wkleić poniższy kod:
 <one-to-many field="posts" target-entity="Valantir\ForumBundle\Entity\Post" mapped-by="author" />
 
 należy zainstalować rozszerzenie php_bbcode stąd https://pecl.php.net/package/bbcode
+
+dodaj do security.yml
+access_control:
+    - { path: ^/forum, role: ROLE_USER }
+
+
+Aby edytować forum, nadaj użytkownikowi rolę ROLE_FORUM_ADMIN

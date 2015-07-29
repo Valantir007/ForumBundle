@@ -5,9 +5,9 @@
             <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
                 {% set page = (topicData.postsCount/10)|round(0,'ceil') %}
                 {% if page > 1 %}
-                    <a href="{{ path('admin_topic_show', {'slug': topic.slug, 'page': page }) }}">{{ topic.name }}</a>
+                    <a href="{{ path('topic_show', {'slug': topic.slug, 'page': page }) }}">{{ topic.name }}</a>
                 {% else %}
-                    <a href="{{ path('admin_topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
+                    <a href="{{ path('topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
                 {% endif %}
                 <div class="small">
                     <div>{{ (topic.description) ? topic.description }}</div>
