@@ -38,4 +38,25 @@ class ForumManager extends BasicManager {
         $query = $qb->getQuery();
         return $query;
     }
+    
+    /**
+     * Find Ancestors by root and right
+     * 
+     * @param int $root
+     * @param int $right
+     * @return array
+     */
+    public function findAncestors($root, $right) {
+        $qb = $this->repository->createQueryBuilder('f');
+        $qb->select('f')
+            ->where('f.root = :root')
+            ->andWhere('f.right >= :right')
+            ->setParameters(array(
+                'root' => $root,
+                'right' => $right
+            ))
+            ->orderBy('f.left');
+        $query = $qb->getQuery();
+        return $query->getResult();
+    }
 }

@@ -35,6 +35,8 @@ class PostController extends Controller
             throw $this->createNotFoundException(sprintf('Post with id %s does not exists', $id));
         }
         
+        $this->get('breadcrumb_service')->generateBreadcrumb($post, $this->translator->trans('edition.post'));
+        
         $postForm = $this->createForm('post_type', $post);
         $postForm->handleRequest($this->request);
         
@@ -59,6 +61,13 @@ class PostController extends Controller
         return $this->forward('ValantirForumBundle:Topic:showTopic', array('slug' => $slug, 'editPost' => $id, 'page' => $page));
     }
     
+    /**
+     * Soft removal post
+     * 
+     * @param int $id
+     * @return Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
     public function removePostAction($id) {
         $post = $this->getPostManager()->find($id);
         

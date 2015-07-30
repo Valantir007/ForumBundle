@@ -5,12 +5,14 @@ namespace Valantir\ForumBundle\Twig;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class co parse bbcode to html
+ * Class to parse bbcode to html
  *
  * @author Kamil
  */
 class BB2HtmlExtension extends \Twig_Extension
 {
+    protected $container;
+    
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
     }

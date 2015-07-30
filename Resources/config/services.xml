@@ -9,6 +9,8 @@
             <argument type="service" id="service_container"/>
         </service>
         
-        <service id="breadcrumb" class="Valantir\ForumBundle\Service\Breadcrumb"/>
+        <service id="breadcrumb_service" class="Valantir\ForumBundle\Service\Breadcrumb">
+            <argument type="service" id="service_container"/>
+        </service>
     </services>
 </container>

@@ -28,6 +28,8 @@ class ForumController extends Controller
      */
     public function indexAction($slug = null)
     {
+        $this->get('breadcrumb_service')->generateBreadcrumb($this->getForumManager()->findOneBy(array('slug' => $slug))); //generate breadcrumb
+        
         $isAdmin = false;
         if($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
             $isAdmin = true;
