@@ -31,8 +31,11 @@ class Topic {
     
     protected $author;
     
+    protected $readers;
+        
     public function __construct() {
         $this->posts = new ArrayCollection();
+        $this->readers = new ArrayCollection();
     }
     
     public function getId() {
@@ -118,5 +121,21 @@ class Topic {
 
     public function setDeletedAt($deletedAt) {
         $this->deletedAt = $deletedAt;
+    }
+    
+    public function setReaders($readers) {
+        $this->readers = $readers;
+    }
+    
+    public function getReaders() {
+        return $this->readers;
+    }
+    
+    public function addReader($reader) {
+        $this->readers->add($reader);
+    }
+    
+    public function removeReader($reader) {
+        $this->readers->removeElement($reader);
     }
 }

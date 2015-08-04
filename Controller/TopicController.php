@@ -38,10 +38,13 @@ class TopicController extends Controller
             $topicsIds[] = $topic[0]->getId();
         }
         
+        $readedTopics = $this->getTopicManager()->readedTopics($topicsIds, $this->getUser()->getId());
         $lastPosts = $this->getPostManager()->getTopicsLastPosts($topicsIds);
+
         return $this->render('ValantirForumBundle:Topic:index.html.twig', array(
             'topics' => $pagination,
-            'lastPosts' => $lastPosts
+            'lastPosts' => $lastPosts,
+            'readedTopics' => $readedTopics
         ));
     }
     
@@ -59,8 +62,7 @@ class TopicController extends Controller
         if(!$topic) {
             throw $this->createNotFoundException(sprintf('Topic with slug %s does not exists', $slug));
         }
-        
-        
+                
         $editingPost = $this->request->attributes->get('editPost', null);
         if($editingPost) {
             $this->generateBreadcrumb($editingPost, $this->translator->trans('edition.post'));
@@ -130,6 +132,16 @@ class TopicController extends Controller
     }
     
     /**
+     * Sets topic as readed by User
+     * 
+     * @param \Valantir\ForumBundle\Controller\Topic $topic
+     */
+    protected function setAsReaded(Topic $topic) {
+        $this->getUser()->addReadedTopic($topic);
+        $this->getUserManager()->update($this->getUser());
+    }
+    
+    /**
      * GenerateBreadcrumb
      * 
      * @param Forum|Topic|Post $object
@@ -155,5 +167,14 @@ class TopicController extends Controller
      */
     private function getPostManager() {
         return $this->get('manager.valantir.post');
+    }
+    
+    /**
+     * Returns user manager
+     * 
+     * @return Valantir\ForumBundle\Manager\UserManager
+     */
+    private function getUserManager() {
+        return $this->get('manager.valantir.user');
     }
 }

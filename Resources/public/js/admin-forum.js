@@ -18,7 +18,8 @@ $(document).ready(function(){
                 plugins: "bbcode",
                 style: "/bundles/valantirforum/plugin/sceditor/minified/jquery.sceditor.default.min.css",
                 locale: $editor.data('locale'),
-                emoticonsRoot: "/bundles/valantirforum/plugin/sceditor/"
+                emoticonsRoot: "/bundles/valantirforum/plugin/sceditor/",
+                toolbar: 'bold,italic,underline,strike|subscript,superscript|left,center,right,justify|font,size,color,removeformat|cut,copy,paste,pastetext|bulletlist,orderedlist|table,code,quote|image,email,link,unlink,emoticon,youtube|date,time|ltr,rtl|print,maximize|source'
             });
 //            $('.bb-editor').wysibb({
 //                allButtons: {

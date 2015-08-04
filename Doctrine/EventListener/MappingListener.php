@@ -40,6 +40,15 @@ class MappingListener {
         
         $classMetadata = $eventArgs->getClassMetadata();
         $assocName = $classMetadata->getAssociationNames();
+//        var_dump($classMetadata->getName());
+        if($classMetadata->getName() == $this->getUserClass()) {
+//            var_dump('fired');die;
+            $this->setReadedTopicsAssociation($classMetadata, $eventArgs);
+            $this->setForumAssociation($classMetadata);
+            $this->setTopicAssociation($classMetadata);
+            $this->setPostAssociation($classMetadata);
+        }
+        
         if(!$assocName) {
             return;
         }
@@ -56,7 +65,7 @@ class MappingListener {
      * 
      * @return string
      */
-    public function getUserClass() {
+    protected function getUserClass() {
         $forumConfig = $this->container->getParameter('valantir_forum');
         return $forumConfig['user_class'];
     }
@@ -68,11 +77,66 @@ class MappingListener {
      * @param type $classMetadata
      * @return string
      */
-    public function getTargetClass(ClassMetadata $classMetadata, $fieldName) {
+    protected function getTargetClass(ClassMetadata $classMetadata, $fieldName) {
         if(isset($classMetadata->associationMappings[$fieldName])) {
             return $classMetadata->associationMappings[$fieldName]['targetEntity'];
         }
         
         return '';
     }
+    
+    /**
+     * Adds readed topics association mapping to User class
+     * 
+     * @param ClassMetadata $classMetadata
+     * @param LoadClassMetadataEventArgs $eventArgs
+     */
+    protected function setReadedTopicsAssociation(ClassMetadata $classMetadata, LoadClassMetadataEventArgs $eventArgs) {
+        $classMetadata->mapManyToMany(array(
+            'fieldName' => 'readedTopics',
+            'mappedBy' => 'readers',
+            'targetEntity' => 'Valantir\ForumBundle\Entity\Topic',
+        ));
+    }
+    
+    /**
+     * Adds forum association mapping to User class
+     * 
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $classMetadata
+     */
+    protected function setForumAssociation(ClassMetadata $classMetadata) {
+        $classMetadata->mapOneToMany(array(
+            'targetEntity' => 'Valantir\ForumBundle\Entity\Forum',
+            'fieldName' => 'forums',
+            'mappedBy' => 'author'
+        ));
+    }
+    
+    /**
+     * Adds topic association mapping to User class
+     * 
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $classMetadata
+     */
+    protected function setTopicAssociation(ClassMetadata $classMetadata) {
+        $classMetadata->mapOneToMany(array(
+            'targetEntity' => 'Valantir\ForumBundle\Entity\Topic',
+            'fieldName' => 'topics',
+            'mappedBy' => 'author'
+        ));
+    }
+    
+    /**
+     * Adds post association mapping to User class
+     * 
+     * @param \Doctrine\ORM\Mapping\ClassMetadata $classMetadata
+     */
+    protected function setPostAssociation(ClassMetadata $classMetadata) {
+        $classMetadata->mapOneToMany(array(
+            'targetEntity' => 'Valantir\ForumBundle\Entity\Post',
+            'fieldName' => 'posts',
+            'mappedBy' => 'author'
+        ));
+    }
+    
+    
 }

@@ -2,7 +2,11 @@
     {% for topicData in topics %}
         {% set topic = topicData[0] %}
         <div class="row forum-row">
-            <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
+            <div class="col-xs-12 col-sm-12 col-md-1 forum-col icon">
+                {% set readed = topic.id in readedTopics %}
+                <i class="glyphicon glyphicon-star star-icon {{ readed ? 'disabled' }}" title="{{ readed ? 'topic.readed'|trans : 'topic.not.readed'|trans }}"></i>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-5 forum-col">
                 {% set page = (topicData.postsCount/10)|round(0,'ceil') %}
                 {% if page > 1 %}
                     <a href="{{ path('topic_show', {'slug': topic.slug, 'page': page }) }}">{{ topic.name }}</a>
@@ -19,7 +23,7 @@
                     {{ 'posts.count'|transchoice(topicData.postsCount) }}
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
+            <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
                 {% if lastPosts[topic.id] is defined %}
                     {% trans with {'%author%': lastPosts[topic.id].author.username, '%date%': lastPosts[topic.id].createdAt|date('Y-m-d H:i:s')} %}
                         last.post.send.by.%author%.on.%date%

@@ -42,6 +42,7 @@ class Breadcrumb {
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
         $this->router = $this->container->get('router');
+        $this->addFirstItem();
     }
     
     /**
@@ -77,6 +78,13 @@ class Breadcrumb {
             default:
                 break;
         }
+    }
+    
+    protected function addFirstItem() {
+        $this->items[] = array(
+            'url' => $this->router->generate('forum_index'),
+            'name' => $this->container->get('translator')->trans('forum.list')
+        );
     }
     
     /**

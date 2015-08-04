@@ -2,6 +2,8 @@
 
 namespace Valantir\ForumBundle\Manager;
 
+use Valantir\ForumBundle\Entity\Forum;
+
 /**
  * Forums manager
  *
@@ -58,5 +60,38 @@ class ForumManager extends BasicManager {
             ->orderBy('f.left');
         $query = $qb->getQuery();
         return $query->getResult();
+    }
+    
+    /**
+     * 
+     * @param Forum|null $forum
+     * @param int $userId
+     */
+    public function readedForums(Forum $forum = null, $userId) {
+        
+        $qb = $this->repository->createQueryBuilder('f');
+        $level = ($forum) ? $forum->getLevel() : 0;
+        $qb->select('f.id', 'COUNT(t.id) AS quantity')
+            ->leftJoin('f.topics', 't')
+            ->where('f.level >= :level')
+            ->groupBy('f.id')
+            ->setParameters(array(
+                'level' => $level
+            ));
+        $query = $qb->getQuery();
+        debug($query->getResult());
+//        $qb->select('f.id AS forumId, u.id AS userId, COUNT(t.id) AS quantity, COUNT(u.id) AS user')
+//            ->leftJoin('f.topics', 't')
+//            ->leftJoin('t.readers', 'u')
+//            ->where('u.id = :user')
+//            ->andWhere($qb->expr()->in('f.id', ':forums'))
+//            ->setParameters(array(
+//                'forums' => $forumsIds,
+//                'user' => $userId
+//            ));
+//        $query = $qb->getQuery();
+////        echo($query->getSql());
+//        wypluj($query->getResult());
+//        return $query->getResult();
     }
 }

@@ -39,12 +39,16 @@ post:
             created: Post został dodany
             removed: Post został usunięty
 topic:
+    readed: Temat przeczytany
+    not:
+        readed: Temat nieprzeczytany
     has:
         been:
             edited: Temat został zedytowany
             created: Temat został dodany
             removed: Temat został usunięty
 forum:
+    list: Forum
     has:
         been:
             edited: Forum został zedytowany

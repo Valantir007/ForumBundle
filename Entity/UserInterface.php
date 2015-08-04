@@ -107,4 +107,32 @@ interface UserInterface {
      * @param Post $post
      */
     public function removePost(Post $post);
+    
+    /**
+     * Gets collection of readed topics
+     * 
+     * @return ArrayCollection
+     */
+    public function getReadedTopics();
+    
+    /**
+     * Sets collection of readed topics
+     * 
+     * @param ArrayCollection $readedTopics
+     */
+    public function setReadedTopics($readedTopics);
+    
+    /**
+     * Adds topic to collection of readed topics
+     * 
+     * @param Topic $readedTopic
+     */
+    public function addReadedTopic(Topic $readedTopic);
+    
+    /**
+     * Removes topic from collection of readed topics
+     * 
+     * @param Topic $readedTopic
+     */
+    public function removeReadedTopic(Topic $readedTopic);
 }

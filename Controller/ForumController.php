@@ -28,17 +28,12 @@ class ForumController extends Controller
      */
     public function indexAction($slug = null)
     {
-        $this->get('breadcrumb_service')->generateBreadcrumb($this->getForumManager()->findOneBy(array('slug' => $slug))); //generate breadcrumb
-        
-        $isAdmin = false;
-        if($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
-            $isAdmin = true;
-        }
+        $currentForum = $this->getForumManager()->findOneBy(array('slug' => $slug));
+        $this->get('breadcrumb_service')->generateBreadcrumb($currentForum); //generate breadcrumb
         
         $forumsQuery = $this->getForumManager()->findForums(($slug) ? $slug : null); //we create query and pass to paginator
-        $currentForum = $this->getForumManager()->findOneBy(array('slug' => $slug));
         
-        if($isAdmin) {
+        if($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
             $forum = new Forum();
             $forumForm = $this->createForm('forum_type', $forum);
             $this->addForum($forumForm, $forum, ($currentForum) ? $currentForum->getId() : null); //call method to add forum
@@ -56,15 +51,19 @@ class ForumController extends Controller
         );
         
         $forumsIds = array();
-        foreach($pagination as $forum) {
-            $forumsIds[] = $forum[0]->getId();
+
+        foreach($pagination->getItems() as $paginationForum) {
+            $forumsIds[] = $paginationForum[0]->getId();
         }
-        
+//        debug($currentForum);
+//        $readedForums = $this->getForumManager()->readedForums($currentForum, $this->getUser()->getId());
+//        wypluj($readedForums);
+//        debug($readedForums);
         $lastPosts = $this->getPostManager()->getForumsLastPosts($forumsIds); //gets last post per forum
         
         return $this->render('ValantirForumBundle:Forum:index.html.twig', array(
             'forums' => $pagination,
-            'forumForm' => ($isAdmin) ? $forumForm->createView() : null,
+            'forumForm' => ($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) ? $forumForm->createView() : null,
             'topicForm' => ($currentForum && $currentForum->getId()) ? $topicForm->createView() : null,
             'lastPosts' => $lastPosts,
             'forumId' => ($currentForum) ? $currentForum->getId() : null

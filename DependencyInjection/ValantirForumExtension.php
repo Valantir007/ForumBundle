@@ -28,6 +28,7 @@ class ValantirForumExtension extends Extension
         $loader->load('managers.xml');
         $loader->load('forms.xml');
         $loader->load('twig.xml');
+        $loader->load('listeners.xml');
         
         $container->setParameter('valantir_forum', $config);
     }

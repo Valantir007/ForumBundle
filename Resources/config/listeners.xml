@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="forum.request.listener" class="Valantir\ForumBundle\Listener\ForumRequestListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onRequest" />
+            <argument type="service" id="manager.valantir.topic" />
+            <argument type="service" id="manager.valantir.user" />
+            <argument type="service" id="security.context" />
+        </service>
+    </services>
+</container>

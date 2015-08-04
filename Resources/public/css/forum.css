@@ -59,3 +59,17 @@
 .nav-tabs {
     margin-bottom: 10px;
 }
+
+.star-icon {
+    font-size: 35px;
+    color: rgba(0,0,0,1);
+}
+
+.star-icon.disabled {
+    color: rgba(0,0,0,0.4);
+}
+
+.forum-col.icon {
+    text-align: center;
+    vertical-align: middle;
+}
