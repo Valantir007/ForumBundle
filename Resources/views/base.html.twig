@@ -9,8 +9,7 @@
             <link rel="stylesheet" href="{{ asset('bundles/valantirforum/css/forum.css') }}">
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        {% block metadescription %}
-        {% endblock metadescription %}
+		<meta name="description" content="{% block metadescription %}{% endblock metadescription %}">
     </head>
     <body>
         <div class="container">
