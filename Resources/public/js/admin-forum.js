@@ -21,6 +21,7 @@ $(document).ready(function(){
                 emoticonsRoot: "/bundles/valantirforum/plugin/sceditor/",
                 toolbar: 'bold,italic,underline,strike|subscript,superscript|left,center,right,justify|font,size,color,removeformat|cut,copy,paste,pastetext|bulletlist,orderedlist|table,code,quote|image,email,link,unlink,emoticon,youtube|date,time|ltr,rtl|print,maximize|source'
             });
+//            $editor.sceditor('instance').width('100%');
 //            $('.bb-editor').wysibb({
 //                allButtons: {
 //                    numlist : { //change ol tag from [list=1] to [ol]

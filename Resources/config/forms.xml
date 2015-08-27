@@ -10,9 +10,13 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
         </service>
         
+        <service id="clear_post_type" class="Valantir\ForumBundle\Form\Type\ClearPostType">
+            <tag name="form.type" alias="clear_post_type" />
+            <argument type="service" id="service_container"/>
+        </service>
+        
         <service id="post_type" class="Valantir\ForumBundle\Form\Type\PostType">
             <tag name="form.type" alias="post_type" />
-            <argument type="service" id="service_container"/>
         </service>
         
         <service id="topic_type" class="Valantir\ForumBundle\Form\Type\TopicType">

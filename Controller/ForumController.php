@@ -5,6 +5,7 @@ namespace Valantir\ForumBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Valantir\ForumBundle\Entity\Forum;
 use Valantir\ForumBundle\Entity\Topic;
+use Valantir\ForumBundle\Entity\Post;
 use Symfony\Component\Form\Form;
 use \Exception;
 
@@ -41,6 +42,10 @@ class ForumController extends Controller
         
         $topic = new Topic();
         $topic->setForum($currentForum);
+        $post = new Post();
+        $post->setAuthor($this->getUser());
+        $topic->addPost($post);
+        
         $topicForm = $this->createForm('topic_type', $topic);        
         $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
         
@@ -55,10 +60,7 @@ class ForumController extends Controller
         foreach($pagination->getItems() as $paginationForum) {
             $forumsIds[] = $paginationForum[0]->getId();
         }
-//        debug($currentForum);
-//        $readedForums = $this->getForumManager()->readedForums($currentForum, $this->getUser()->getId());
-//        wypluj($readedForums);
-//        debug($readedForums);
+        
         $lastPosts = $this->getPostManager()->getForumsLastPosts($forumsIds); //gets last post per forum
         
         return $this->render('ValantirForumBundle:Forum:index.html.twig', array(
@@ -120,6 +122,7 @@ class ForumController extends Controller
                     $this->translator->trans('topic.has.been.created')
                 );
             } catch (Exception $ex) {
+                debug($ex->getMessage());
                 $this->addFlash(
                     'danger',
                     $this->translator->trans('topic.has.not.been.created')

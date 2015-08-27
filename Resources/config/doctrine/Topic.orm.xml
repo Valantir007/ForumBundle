@@ -31,6 +31,7 @@
         
         <one-to-many field="posts" target-entity="Post" mapped-by="topic">
             <cascade>
+                <cascade-persist />
                 <cascade-remove />
             </cascade>
         </one-to-many>

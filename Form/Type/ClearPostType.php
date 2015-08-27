@@ -7,14 +7,23 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PostType extends AbstractType {    
+class ClearPostType extends AbstractType {
+    
+    protected $container;
+    
+    public function __construct(ContainerInterface $container) {
+        $this->container = $container;
+    }
+    
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('description', 'clear_post_type', array(
-                'label' => false
-            ))
-            ->add('save', 'submit', array(
-                'label' => 'label.save'
+            ->add('description', null, array(
+                'label' => false,
+                'required' => false,
+                'attr' => array(
+                    'class' => 'bb-editor',
+                    'data-locale' => $this->container->get('request')->getLocale()
+                )
             ))
         ;
     }
@@ -26,6 +35,6 @@ class PostType extends AbstractType {
     }
     
     public function getName() {
-        return 'post_type';
+        return 'clear_post_type';
     }
 }

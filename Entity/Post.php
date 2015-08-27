@@ -11,7 +11,7 @@ use Valantir\ForumBundle\Model\Post as BasicPost;
  */
 class Post extends BasicPost {
     public function __toString() {
-        return $this->name;
+        return $this->description;
     }
     
     public function prePersist() {

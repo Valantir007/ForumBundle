@@ -5,7 +5,6 @@ namespace Valantir\ForumBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TopicType extends AbstractType {
     
@@ -23,6 +22,14 @@ class TopicType extends AbstractType {
                 'label' => false,
                 'attr' => array(
                     'placeholder' => 'placeholder.description'
+                )
+            ))
+            ->add('posts', 'collection', array(
+                'type' => 'clear_post_type',
+                'allow_add' => false,
+                'label' => false,
+                'options' => array(
+                    'label' => false
                 )
             ))
             ->add('save', 'submit', array(
