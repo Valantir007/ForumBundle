@@ -29,7 +29,8 @@ class TopicType extends AbstractType {
                 'allow_add' => false,
                 'label' => false,
                 'options' => array(
-                    'label' => false
+                    'label' => false,
+					'data_class' => 'Valantir\ForumBundle\Entity\Post'
                 )
             ))
             ->add('save', 'submit', array(
