@@ -79,7 +79,6 @@ class ForumManager extends BasicManager {
                 'level' => $level
             ));
         $query = $qb->getQuery();
-        debug($query->getResult());
 //        $qb->select('f.id AS forumId, u.id AS userId, COUNT(t.id) AS quantity, COUNT(u.id) AS user')
 //            ->leftJoin('f.topics', 't')
 //            ->leftJoin('t.readers', 'u')

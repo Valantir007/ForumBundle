@@ -45,7 +45,7 @@ class ForumController extends Controller
         $post = new Post();
         $post->setAuthor($this->getUser());
         $topic->addPost($post);
-        
+
         $topicForm = $this->createForm('topic_type', $topic);        
         $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
         
@@ -122,7 +122,7 @@ class ForumController extends Controller
                     $this->translator->trans('topic.has.been.created')
                 );
             } catch (Exception $ex) {
-                debug($ex->getMessage());
+                throw $ex;
                 $this->addFlash(
                     'danger',
                     $this->translator->trans('topic.has.not.been.created')

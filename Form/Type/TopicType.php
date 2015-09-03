@@ -25,12 +25,13 @@ class TopicType extends AbstractType {
                 )
             ))
             ->add('posts', 'collection', array(
-                'type' => 'clear_post_type',
+                'type' => 'post_type',
                 'allow_add' => false,
                 'label' => false,
                 'options' => array(
                     'label' => false,
-					'data_class' => 'Valantir\ForumBundle\Entity\Post'
+                    'data_class' => 'Valantir\ForumBundle\Entity\Post',
+                    'submit' => false
                 )
             ))
             ->add('save', 'submit', array(

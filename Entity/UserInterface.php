@@ -25,6 +25,13 @@ interface UserInterface {
     public function getUsername();
     
     /**
+     * Returns avatar path
+     * 
+     * @return string
+     */
+    public function getAvatar();
+    
+    /**
      * Forums created by user
      * 
      * @return ArrayCollection
