@@ -65,7 +65,8 @@ stof_doctrine_extensions:
             sluggable: true
             sortable: true
             tree: true
-
+```
+```
 services:
     gedmo.listener.softdeleteable:
         class: Gedmo\SoftDeleteable\SoftDeleteableListener
@@ -73,7 +74,8 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
-
+```
+```
 doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
