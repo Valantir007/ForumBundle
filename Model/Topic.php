@@ -3,139 +3,327 @@
 namespace Valantir\ForumBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use \DateTime;
 
 /**
  * Model of Topic
  *
  * @author Kamil
  */
-class Topic {
-    
+class Topic
+{
+    /**
+     * @var integer
+     */
     protected $id;
-    
+
+    /**
+     * @var string
+     */
     protected $name;
-    
+
+    /**
+     * @var string
+     */
     protected $slug;
-    
+
+    /**
+     * @var string
+     */
     protected $description;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $createdAt;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $updatedAt;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $deletedAt;
-    
+
+    /**
+     * @var Forum
+     */
     protected $forum;
-    
+
+    /**
+     *
+     * @var ArrayCollection
+     */
     protected $posts;
-    
+
+    /**
+     * @var Object - user class
+     */
     protected $author;
-    
+
+    /**
+     *
+     * @var ArrayCollection
+     */
     protected $readers;
-        
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->posts = new ArrayCollection();
         $this->readers = new ArrayCollection();
     }
-    
-    public function getId() {
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
         return $this->id;
     }
-    
-    public function getName() {
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
         return $this->name;
     }
-    
-    public function getSlug() {
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
         return $this->slug;
     }
 
-    public function getCreatedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
         return $this->updatedAt;
     }
 
-    public function setName($name) {
+    /**
+     * @param string $name
+     * 
+     * @return Topic
+     */
+    public function setName($name)
+    {
         $this->name = $name;
+
+        return $this;
     }
-    
-    public function setSlug($slug) {
+
+    /**
+     * @param string $slug
+     * 
+     * @return Topic
+     */
+    public function setSlug($slug)
+    {
         $this->slug = $slug;
+
+        return $this;
     }
 
-    public function setCreatedAt($createdAt) {
+    /**
+     * @param DateTime $createdAt
+     * 
+     * @return Topic
+     */
+    public function setCreatedAt(DateTime $createdAt = null)
+    {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
-    public function setUpdatedAt($updatedAt) {
+    /**
+     * @param DateTime $updatedAt
+     * 
+     * @return Topic
+     */
+    public function setUpdatedAt(DateTime $updatedAt = null)
+    {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
-    
-    public function getForum() {
+
+    /**
+     * @return Forum
+     */
+    public function getForum()
+    {
         return $this->forum;
     }
 
-    public function setForum($forum) {
+    /**
+     * @param Forum $forum
+     * 
+     * @return Topic
+     */
+    public function setForum(Forum $forum = null)
+    {
         $this->forum = $forum;
+
+        return $this;
     }
-    
-    public function getPosts() {
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getPosts()
+    {
         return $this->posts;
     }
 
-    public function setPosts($posts) {
+    /**
+     * @param ArrayCollection $posts
+     * 
+     * @return Topic
+     */
+    public function setPosts(ArrayCollection $posts)
+    {
         $this->posts = $posts;
+
+        return $this;
     }
 
+    /**
+     * @param Post $post
+     * 
+     * @return Topic
+     */
     public function addPost(Post $post) {
         $post->setTopic($this);
         $this->posts->add($post);
+
+        return $this;
     }
-    
-    public function removePost(Post $post) {
+
+    /**
+     * @param Post $post
+     * 
+     * @return Topic
+     */
+    public function removePost(Post $post)
+    {
         $this->posts->removeElement($post);
+
+        return $this;
     }
-    
-    public function getAuthor() {
+
+    /**
+     * @return Object - user object
+     */
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    public function setAuthor($author) {
+    /**
+     * @param Object $author - user object
+     * 
+     * @return Topic
+     */
+    public function setAuthor($author)
+    {
         $this->author = $author;
+
+        return $this;
     }
-    
-    public function getDescription() {
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($description) {
+    /**
+     * @param string $description
+     * 
+     * @return Topic
+     */
+    public function setDescription($description)
+    {
         $this->description = $description;
+
+        return $this;
     }
 
-    public function getDeletedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getDeletedAt()
+    {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt($deletedAt) {
+    /**
+     * @param DateTime $deletedAt
+     * 
+     * @return Topic
+     */
+    public function setDeletedAt(DateTime $deletedAt = null)
+    {
         $this->deletedAt = $deletedAt;
+
+        return $this;
     }
-    
-    public function setReaders($readers) {
+
+    /**
+     * @param ArrayCollection $readers
+     * 
+     * @return Topic
+     */
+    public function setReaders(ArrayCollection $readers)
+    {
         $this->readers = $readers;
+
+        return $this;
     }
-    
-    public function getReaders() {
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getReaders()
+    {
         return $this->readers;
     }
-    
-    public function addReader($reader) {
+
+    /**
+     * @param Object $reader - user object
+     */
+    public function addReader($reader)
+    {
         $this->readers->add($reader);
     }
-    
-    public function removeReader($reader) {
+
+    /**
+     * @param Object $reader - user object
+     * 
+     * @return Topic
+     */
+    public function removeReader($reader)
+    {
         $this->readers->removeElement($reader);
+
+        return $this;
     }
 }

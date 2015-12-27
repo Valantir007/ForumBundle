@@ -6,26 +6,26 @@
 
     <services>
         <service id="base.valantir.entity_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="true" />
-        
+
         <service id="manager.valantir.forum" class="Valantir\ForumBundle\Manager\ForumManager">
             <argument type="service" id="base.valantir.entity_manager" />
             <argument>Valantir\ForumBundle\Entity\Forum</argument>
         </service>
-        
+
         <service id="manager.valantir.topic" class="Valantir\ForumBundle\Manager\TopicManager">
             <argument type="service" id="base.valantir.entity_manager" />
             <argument>Valantir\ForumBundle\Entity\Topic</argument>
         </service>
-        
+
         <service id="manager.valantir.post" class="Valantir\ForumBundle\Manager\PostManager">
             <argument type="service" id="base.valantir.entity_manager" />
             <argument>Valantir\ForumBundle\Entity\Post</argument>
         </service>
-        
+
         <service id="manager.valantir.user" class="Valantir\ForumBundle\Manager\UserManager">
             <argument type="service" id="base.valantir.entity_manager" />
-            <argument></argument>
             <argument type="service" id="service_container" />
         </service>
     </services>
+
 </container>

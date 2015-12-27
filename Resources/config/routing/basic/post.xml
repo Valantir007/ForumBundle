@@ -10,7 +10,7 @@
         <default key="page"></default>
         <requirement key="page">\d+</requirement>
     </route>
-    
+
     <route id="post_remove" path="/{id}/remove">
         <default key="_controller">ValantirForumBundle:Post:removePost</default>
         <requirement key="id">\d+</requirement>

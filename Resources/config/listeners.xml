@@ -12,4 +12,5 @@
             <argument type="service" id="security.context" />
         </service>
     </services>
+
 </container>

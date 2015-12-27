@@ -2,44 +2,63 @@
 
 namespace Valantir\ForumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use \Exception;
+use Symfony\Component\Form\Form;
+use Knp\Component\Pager\Paginator;
 use Valantir\ForumBundle\Entity\Forum;
 use Valantir\ForumBundle\Entity\Topic;
 use Valantir\ForumBundle\Entity\Post;
-use Symfony\Component\Form\Form;
-use \Exception;
+use Symfony\Component\HttpFoundation\Request;
+use Valantir\ForumBundle\Manager\PostManager;
+use Symfony\Component\HttpFoundation\Response;
+use Valantir\ForumBundle\Manager\TopicManager;
+use Valantir\ForumBundle\Manager\ForumManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Translation\DataCollectorTranslator;
 
 /**
- * Forum controller.
+ * Forum controller
+ *
+ * @author Kamil Demurat
  */
 class ForumController extends Controller
 {
-
+    /**
+     * @var Request
+     */
     protected $request;
-    
+
+    /**
+     * @var DataCollectorTranslator
+     */
     protected $translator;
-    
+
+    /**
+     * @var Paginator
+     */
     protected $paginator;
-    
+
     /**
      * List of forums with topic and forum forms
      * 
      * @param string $slug
-     * @return Symfony\Component\HttpFoundation\Response
+     * 
+     * @return Response
      */
     public function indexAction($slug = null)
     {
         $currentForum = $this->getForumManager()->findOneBy(array('slug' => $slug));
         $this->get('breadcrumb_service')->generateBreadcrumb($currentForum); //generate breadcrumb
-        
+
         $forumsQuery = $this->getForumManager()->findForums(($slug) ? $slug : null); //we create query and pass to paginator
-        
-        if($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
+
+        if ($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
             $forum = new Forum();
             $forumForm = $this->createForm('forum_type', $forum);
             $this->addForum($forumForm, $forum, ($currentForum) ? $currentForum->getId() : null); //call method to add forum
         }
-        
+
         $topic = new Topic();
         $topic->setForum($currentForum);
         $post = new Post();
@@ -48,21 +67,21 @@ class ForumController extends Controller
 
         $topicForm = $this->createForm('topic_type', $topic);        
         $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
-        
+
         $pagination = $this->paginator->paginate(
             $forumsQuery,
             $this->request->query->getInt('page', 1),
             10
         );
-        
+
         $forumsIds = array();
 
-        foreach($pagination->getItems() as $paginationForum) {
+        foreach ($pagination->getItems() as $paginationForum) {
             $forumsIds[] = $paginationForum[0]->getId();
         }
-        
+
         $lastPosts = $this->getPostManager()->getForumsLastPosts($forumsIds); //gets last post per forum
-        
+
         return $this->render('ValantirForumBundle:Forum:index.html.twig', array(
             'forums' => $pagination,
             'forumForm' => ($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) ? $forumForm->createView() : null,
@@ -73,16 +92,18 @@ class ForumController extends Controller
     }
 
     /**
-     * Add Forum to database if form is valid
+     * Adds Forum to database if form is valid
      * 
-     * @param \Symfony\Component\Form\Form $forumForm
-     * @param \Valantir\ForumBundle\Entity\Forum $forum
-     * @param int $parent
-     * @return Symfony\Component\HttpFoundation\RedirectResponse|null
+     * @param Form  $forumForm
+     * @param Forum $forum
+     * @param int   $parent
+     * 
+     * @return RedirectResponse|null
      */
-    protected function addForum(Form $forumForm, Forum $forum, $parent) {
+    protected function addForum(Form $forumForm, Forum $forum, $parent)
+    {
         $forumForm->handleRequest($this->request);
-        if($forumForm->isValid()) {
+        if ($forumForm->isValid()) {
             try {
                 $forum->setAuthor($this->getUser());
                 $this->getForumManager()->update($forum);
@@ -101,19 +122,23 @@ class ForumController extends Controller
                 'parent' => $parent
             )));
         }
+
+        return;
     }
-    
+
     /**
-     * Add Topic to database if form is valid
+     * Adds Topic to database if form is valid
      * 
-     * @param \Symfony\Component\Form\Form $topicForm
-     * @param \Valantir\ForumBundle\Entity\Topic $topic
-     * @param int $parent
-     * @return Symfony\Component\HttpFoundation\RedirectResponse|null
+     * @param Form  $topicForm
+     * @param Topic $topic
+     * @param int   $parent
+     * 
+     * @return RedirectResponse|null
      */
-    protected function addTopic(Form $topicForm, Topic $topic, $parent) {
+    protected function addTopic(Form $topicForm, Topic $topic, $parent)
+    {
         $topicForm->handleRequest($this->request);
-        if($topicForm->isValid()) {
+        if ($topicForm->isValid()) {
             try {
                 $topic->setAuthor($this->getUser());
                 $this->getTopicManager()->update($topic);
@@ -128,37 +153,40 @@ class ForumController extends Controller
                     $this->translator->trans('topic.has.not.been.created')
                 );
             }
-            
+
             return $this->redirect($this->generateUrl('forum_index', array(
                 'parent' => $parent
             )));
         }
     }
-    
+
     /**
      * Returns forum manager
      * 
-     * @return Valantir\ForumBundle\Manager\ForumManager
+     * @return ForumManager
      */
-    private function getForumManager() {
+    private function getForumManager()
+    {
         return $this->get('manager.valantir.forum');
     }
-    
+
     /**
      * Returns topic manager
      * 
-     * @return Valantir\ForumBundle\Manager\TopicManager
+     * @return TopicManager
      */
-    private function getTopicManager() {
+    private function getTopicManager()
+    {
         return $this->get('manager.valantir.topic');
     }
-    
+
     /**
      * Returns post manager
      * 
-     * @return Valantir\ForumBundle\Manager\PostManager
+     * @return PostManager
      */
-    private function getPostManager() {
+    private function getPostManager()
+    {
         return $this->get('manager.valantir.post');
     }
 }

@@ -3,22 +3,40 @@
 namespace Valantir\ForumBundle\Entity;
 
 use Valantir\ForumBundle\Model\Topic as BasicTopic;
+use \DateTime;
 
 /**
  * Entity of Topic
  *
- * @author Kamil
+ * @author Kamil Demurat
  */
-class Topic extends BasicTopic {
-    public function __toString() {
+class Topic extends BasicTopic
+{
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
         return $this->name;
     }
-    
-    public function prePersist() {
-        $this->createdAt = new \DateTime();
+
+    /**
+     * @return Topic
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new DateTime();
+
+        return $this;
     }
-    
-    public function preUpdate() {
-        $this->updatedAt = new \DateTime();
+
+    /**
+     * @return Topic
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new DateTime();
+
+        return $this;
     }
 }

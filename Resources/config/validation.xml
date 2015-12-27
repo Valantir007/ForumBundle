@@ -11,7 +11,7 @@
             <constraint name="NotBlank"/>
         </property>
     </class>
-    
+
     <class name="Valantir\ForumBundle\Entity\Topic">
         <property name="forum">
             <constraint name="NotNull"/>
@@ -20,7 +20,7 @@
             <constraint name="NotBlank"/>
         </property>
     </class>
-    
+
     <class name="Valantir\ForumBundle\Entity\Post">
         <property name="description">
             <constraint name="NotBlank"/>

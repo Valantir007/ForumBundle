@@ -8,7 +8,7 @@
         <default key="_controller">ValantirForumBundle:Topic:index</default>
         <requirement key="forumId">\d+</requirement>
     </route>
-    
+
     <route id="topic_show_quotation" path="/{slug}/quotation/{quotationPostId}">
         <default key="_controller">ValantirForumBundle:Topic:showTopic</default>
         <default key="quotationPostId"></default>

@@ -3,61 +3,119 @@
 namespace Valantir\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 /**
- * Description of BasicManager
+ * Basic class to set managers for each forum entity
  *
- * @author Kamil
+ * @author Kamil Demurat
  */
-abstract class BasicManager{
-    
+abstract class BasicManager
+{
+    /**
+     * @var EntityManager
+     */
     protected $em;
+
+    /**
+     * @var EntityRepository
+     */
     protected $repository;
+
+    /**
+     * @var string
+     */
     protected $class;
-    
-    public function __construct(EntityManager $em, $class) {
+
+    /**
+     * @param EntityManager $em
+     * @param string        $class
+     */
+    public function __construct(EntityManager $em, $class)
+    {
         $this->em           = $em;
         $this->class        = $class;
         $this->repository   = $em->getRepository($this->class);
     }
-    
-    public function remove($object, $flush = true) {
+
+    /**
+     * @param Object $object
+     * @param boolean $flush
+     */
+    public function remove($object, $flush = true)
+    {
         $this->em->remove($object);
-        if($flush)
-        {
+        if ($flush) {
             $this->em->flush();
         }
     }
-    
-    public function refresh($object) {
+
+    /**
+     * @param Object $object
+     */
+    public function refresh($object)
+    {
         $this->em->refresh($object);
     }
-    
-    public function update($object, $flush = true) {
+
+    /**
+     * @param Object $object
+     * @param boolean $flush
+     */
+    public function update($object, $flush = true)
+    {
         $this->em->persist($object);
-        if($flush)
-        {
+        if ($flush) {
             $this->em->flush();
         }
     }
-    
-    public function flush() {
+
+    /**
+     * Flushes all changes to objects
+     */
+    public function flush()
+    {
         $this->em->flush();
     }
-    
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null) {
+
+    /**
+     * @param array        $criteria
+     * @param string|null  $orderBy
+     * @param integer|null $limit
+     * @param integer|null $offset
+     * 
+     * @return array
+     */
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+    {
         return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
     }
-    
-    public function findAll() {
+
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
         return $this->repository->findAll();
     }
-    
-    public function findOneBy($values) {
+
+    /**
+     * @param array $values
+     * 
+     * @return Object|null
+     */
+    public function findOneBy($values)
+    {
         return $this->repository->findOneBy($values);
     }
-    
-    public function find($id) {
+
+    /**
+     * @param integer $id
+     * 
+     * @return Object
+     */
+    public function find($id)
+    {
         return $this->repository->find($id);
     }
 }

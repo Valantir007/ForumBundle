@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
     xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
-    
+
     <entity name="Valantir\ForumBundle\Entity\Post" table="valantir_forum_post">
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
@@ -27,7 +27,7 @@
             <lifecycle-callback type="prePersist" method="prePersist" />
             <lifecycle-callback type="preUpdate" method="preUpdate" />
         </lifecycle-callbacks>
-        
+
         <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />
     </entity>
 </doctrine-mapping>

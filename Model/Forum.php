@@ -3,170 +3,404 @@
 namespace Valantir\ForumBundle\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use \DateTime;
 
 /**
  * Model of Forum
  *
- * @author Kamil
+ * @author Kamil Demurat
  */
 class Forum {
+    /**
+     * @var integer
+     */
     protected $id;
-    
+
+    /**
+     * @var string
+     */
     protected $name;
-    
+
+    /**
+     * @var string
+     */
     protected $slug;
-    
+
+    /**
+     * @var integer
+     */
     protected $left;
-    
+
+    /**
+     * @var integer
+     */
     protected $level;
-    
+
+    /**
+     * @var integer
+     */
     protected $right;
-    
+
+    /**
+     * @var integer
+     */
     protected $root;
-    
+
+    /**
+     * @var string
+     */
     protected $description;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $createdAt;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $updatedAt;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $deletedAt;
-    
+
+    /**
+     * @var ArrayCollection
+     */
     protected $topics;
-    
+
+    /**
+     * @var Forum
+     */
     protected $parent;
-    
+
+    /**
+     * @var ArrayCollection
+     */
     protected $children;
-    
+
+    /**
+     * @var Object - user entity class
+     */
     protected $author;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $this->topics = new ArrayCollection();
         $this->children = new ArrayCollection();
     }
-    
-    public function getId() {
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
         return $this->id;
     }
-    
-    public function getName() {
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
         return $this->name;
     }
-    
+
+    /**
+     * @return string
+     */
     public function getSlug() {
         return $this->slug;
     }
 
-    public function getCreatedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
         return $this->updatedAt;
     }
 
-    public function setName($name) {
+    /**
+     * @param string
+     * 
+     * @return Forum
+     */
+    public function setName($name)
+    {
         $this->name = $name;
+
+        return $this;
     }
 
-    public function setSlug($slug) {
+    /**
+     * @param string
+     * 
+     * @return Forum
+     */
+    public function setSlug($slug)
+    {
         $this->slug = $slug;
+
+        return $this;
     }
 
-    public function setCreatedAt($createdAt) {
+    /**
+     * @param DateTime
+     * 
+     * @return Forum
+     */
+    public function setCreatedAt(DateTime $createdAt)
+    {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
-    public function setUpdatedAt($updatedAt) {
+    /**
+     * @param DateTime
+     * 
+     * @return Forum
+     */
+    public function setUpdatedAt(DateTime $updatedAt)
+    {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
-    
-    public function getTopics() {
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTopics()
+    {
         return $this->topics;
     }
 
-    public function setTopics($topics) {
+    /**
+     * @param ArrayCollection $topics
+     * 
+     * @return Forum
+     */
+    public function setTopics(ArrayCollection $topics)
+    {
         $this->topics = $topics;
+
+        return $this;
     }
 
-    public function addTopic(Topic $topic) {
+    /**
+     * @param Topic $topic
+     * 
+     * @return Forum
+     */
+    public function addTopic(Topic $topic)
+    {
         $topic->setCategory($this);
         $this->topics->add($topic);
+
+        return $this;
     }
-    
-    public function removeTopic(Topic $topic) {
+
+    /**
+     * @param Topic $topic
+     * 
+     * @return Forum
+     */
+    public function removeTopic(Topic $topic)
+    {
         $this->topics->removeElement($topic);
+
+        return $this;
     }
-    
-    public function getAuthor() {
+
+    /**
+     * @return Object - user class
+     */
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    public function setAuthor($author) {
+    /**
+     * @param Object $author - user class
+     * 
+     * @return Forum
+     */
+    public function setAuthor($author)
+    {
         $this->author = $author;
+
+        return $this;
     }
-    
-    public function getDescription() {
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($description) {
+    /**
+     * @param string $description
+     * 
+     * @return Forum
+     */
+    public function setDescription($description)
+    {
         $this->description = $description;
+
+        return $this;
     }
 
-    public function getParent() {
+    /**
+     * @return Forum
+     */
+    public function getParent()
+    {
         return $this->parent;
     }
 
-    public function getChildren() {
+    /**
+     * @return ArrayCollection
+     */
+    public function getChildren()
+    {
         return $this->children;
     }
 
-    public function setParent($parent) {
+    /**
+     * @param Forum $parent
+     * 
+     * @return Forum
+     */
+    public function setParent(Forum $parent)
+    {
         $this->parent = $parent;
+
+        return $this;
     }
 
-    public function setChildren($children) {
+    /**
+     * @param ArrayCollection $children
+     * 
+     * @return Forum
+     */
+    public function setChildren(ArrayCollection $children)
+    {
         $this->children = $children;
+
+        return $this;
     }
-    
-    public function getLeft() {
+
+    /**
+     * @return integer
+     */
+    public function getLeft()
+    {
         return $this->left;
     }
 
-    public function getLevel() {
+    /**
+     * @return integer
+     */
+    public function getLevel()
+    {
         return $this->level;
     }
 
-    public function getRight() {
+    /**
+     * @return integer
+     */
+    public function getRight()
+    {
         return $this->right;
     }
 
-    public function getRoot() {
+    /**
+     * @return integer
+     */
+    public function getRoot()
+    {
         return $this->root;
     }
 
-    public function setLeft($left) {
+    /**
+     * @param integer $left
+     * 
+     * @return Forum
+     */
+    public function setLeft($left)
+    {
         $this->left = $left;
+
+        return $this;
     }
 
-    public function setLevel($level) {
+    /**
+     * @param integer $level
+     * 
+     * @return Forum
+     */
+    public function setLevel($level)
+    {
         $this->level = $level;
+
+        return $this;
     }
 
-    public function setRight($right) {
+    /**
+     * @param integer $right
+     * 
+     * @return Forum
+     */
+    public function setRight($right)
+    {
         $this->right = $right;
+
+        return $this;
     }
 
-    public function setRoot($root) {
+    /**
+     * @param integer $root
+     * 
+     * @return Forum
+     */
+    public function setRoot($root)
+    {
         $this->root = $root;
+
+        return $this;
     }
 
-    public function getDeletedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getDeletedAt()
+    {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt($deletedAt) {
+    /**
+     * @param DateTime $deletedAt
+     * 
+     * @return Forum
+     */
+    public function setDeletedAt(DateTime $deletedAt)
+    {
         $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 }

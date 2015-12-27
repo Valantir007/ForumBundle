@@ -2,75 +2,171 @@
 
 namespace Valantir\ForumBundle\Model;
 
+use \DateTime;
+
 /**
  * Model of Post
  *
  * @author Kamil
  */
-class Post {
+class Post
+{
+    /**
+     * @var integer
+     */
     protected $id;
-    
+
+    /**
+     * @var string
+     */
     protected $description;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $createdAt;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $updatedAt;
-    
+
+    /**
+     * @var DateTime
+     */
     protected $deletedAt;
-    
+
+    /**
+     * @var Topic
+     */
     protected $topic;
-    
+
+    /**
+     * @var Object - user object
+     */
     protected $author;
-    
-    public function getId() {
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getCreatedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getUpdatedAt()
+    {
         return $this->updatedAt;
     }
 
-    public function setCreatedAt($createdAt) {
+    /**
+     * @param DateTime $createdAt
+     * 
+     * @return Post
+     */
+    public function setCreatedAt(DateTime $createdAt = null)
+    {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
-    public function setUpdatedAt($updatedAt) {
+    /**
+     * @param DateTime $updatedAt
+     * 
+     * @return Post
+     */
+    public function setUpdatedAt(DateTime $updatedAt = null)
+    {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
-    
-    public function getTopic() {
+
+    /**
+     * @return Topic
+     */
+    public function getTopic()
+    {
         return $this->topic;
     }
 
-    public function setTopic(Topic $topic) {
+    /**
+     * @param Topic $topic
+     * 
+     * @return Post
+     */
+    public function setTopic(Topic $topic)
+    {
         $this->topic = $topic;
+
+        return $this;
     }
-    
-    public function getAuthor() {
+
+    /**
+     * @return Object - user class
+     */
+    public function getAuthor()
+    {
         return $this->author;
     }
 
-    public function setAuthor($author) {
+    /**
+     * @param Object $author - user object
+     */
+    public function setAuthor($author)
+    {
         $this->author = $author;
     }
-    
-    public function getDescription() {
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($description) {
+    /**
+     * @param string $description
+     * 
+     * @return Post
+     */
+    public function setDescription($description)
+    {
         $this->description = strip_tags($description);
+
+        return $this;
     }
 
-    public function getDeletedAt() {
+    /**
+     * @return DateTime
+     */
+    public function getDeletedAt()
+    {
         return $this->deletedAt;
     }
 
-    public function setDeletedAt($deletedAt) {
+    /**
+     * @param DateTime $deletedAt
+     * 
+     * @return Post
+     */
+    public function setDeletedAt(DateTime $deletedAt = null)
+    {
         $this->deletedAt = $deletedAt;
+
+        return $this;
     }
 }

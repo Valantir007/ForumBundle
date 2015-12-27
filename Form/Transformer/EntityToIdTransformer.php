@@ -6,7 +6,13 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class EntityToIdTransformer implements DataTransformerInterface {
+/**
+ * Transforms entity to id and id to entity
+ *
+ * @author Kamil Demurat
+ */
+class EntityToIdTransformer implements DataTransformerInterface
+{
     /**
      * @var ObjectManager
      */
@@ -17,28 +23,42 @@ class EntityToIdTransformer implements DataTransformerInterface {
      */
     protected $class;
 
-    public function __construct(ObjectManager $objectManager, $class) {
+    /**
+     * @param ObjectManager $objectManager
+     * @param string        $class
+     */
+    public function __construct(ObjectManager $objectManager, $class)
+    {
         $this->objectManager = $objectManager;
         $this->class = $class;
     }
 
-    public function transform($entity) {
-//        echo 'transform';
-//        wypluj($entity);
+    /**
+     * @param Object $entity
+     * 
+     * @return int|null
+     */
+    public function transform($entity)
+    {
         if (null === $entity) {
             return;
         }
-        
+
         return $entity->getId();
     }
 
+    /**
+     * @param integer $id
+     * 
+     * @return Object
+     * 
+     * @throws TransformationFailedException
+     */
     public function reverseTransform($id) {
-//        echo 'revert';
-//        wypluj($id);
         if (!$id) {
             return null;
         }
-        
+
         $entity = $this->objectManager
             ->getRepository($this->class)
             ->find($id);
@@ -46,7 +66,7 @@ class EntityToIdTransformer implements DataTransformerInterface {
         if (null === $entity) {
             throw new TransformationFailedException();
         }
-        
+
         return $entity;
     }
 }

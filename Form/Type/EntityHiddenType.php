@@ -9,6 +9,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Valantir\ForumBundle\Form\Transformer\EntityToIdTransformer;
 
+/**
+ * Type of form for hidden field with id of entity
+ *
+ * @author Kamil Demurat
+ */
 class EntityHiddenType extends AbstractType
 {
     /**
@@ -16,17 +21,27 @@ class EntityHiddenType extends AbstractType
      */
     protected $objectManager;
 
+    /**
+     * @param ObjectManager $objectManager
+     */
     public function __construct(ObjectManager $objectManager)
     {
         $this->objectManager = $objectManager;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $transformer = new EntityToIdTransformer($this->objectManager, $options['class']);
         $builder->addModelTransformer($transformer);
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver
@@ -37,11 +52,19 @@ class EntityHiddenType extends AbstractType
         ;
     }
 
-    public function getParent() {
+    /**
+     * @return string
+     */
+    public function getParent()
+    {
         return 'hidden';
     }
 
-    public function getName() {
+    /**
+     * @return string
+     */
+    public function getName()
+    {
         return 'entity_hidden';
     }
 }

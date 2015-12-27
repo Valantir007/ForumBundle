@@ -8,11 +8,11 @@
         <indexes>
             <index name="name_idx" columns="name"/>
         </indexes>
-        
+
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>
         </id>
-        
+
         <field name="left" column="lft" type="integer">
             <gedmo:tree-left/>
         </field>
@@ -33,17 +33,15 @@
         <field name="slug" type="string" length="255" unique="true">
             <gedmo:slug unique="true" updatable="true" separator="-" fields="name" />
         </field>
-        
+
         <many-to-one field="author" target-entity="User" inversed-by="forums">
             <join-column name="author_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
-        
         <one-to-many field="topics" target-entity="Topic" mapped-by="forum">
             <cascade>
                 <cascade-remove />
             </cascade>
         </one-to-many>
-        
         <many-to-one field="parent" target-entity="Forum" inversed-by="children">
             <join-column name="parent_id" referenced-column-name="id" on-delete="CASCADE"/>
             <gedmo:tree-parent/>
@@ -51,18 +49,17 @@
                 <cascade-persist />
             </cascade>
         </many-to-one>
-        
         <one-to-many field="children" target-entity="Forum" mapped-by="parent">
             <cascade>
                 <cascade-remove />
             </cascade>
         </one-to-many>
-        
+
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="prePersist" />
             <lifecycle-callback type="preUpdate" method="preUpdate" />
         </lifecycle-callbacks>
-        
+
         <gedmo:tree type="nested"/>
         <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />
     </entity>

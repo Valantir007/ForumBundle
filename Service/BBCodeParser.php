@@ -9,10 +9,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * 
  * TODO: Write parser without bb_code extension
  *
- * @author Kamil
+ * @author Kamil Demurat
  */
-class BBCodeParser {
-    
+class BBCodeParser
+{
     /**
      * Tags to replace
      * 
@@ -47,7 +47,7 @@ class BBCodeParser {
         'ltr'=> array('type'=>BBCODE_TYPE_NOARG, 'open_tag'=>'<p dir="ltr">', 'close_tag'=>'</p>'),
         'rtl'=> array('type'=>BBCODE_TYPE_NOARG, 'open_tag'=>'<p dir="rtl">', 'close_tag'=>'</p>'),
     );
-    
+
     /**
      * Smiles and names of files
      * 
@@ -86,58 +86,81 @@ class BBCodeParser {
         ":woot:" => 'w00t.png',
         ":wassat:" => 'wassat.png',
     );
-    
-    protected $handler; //bbcode handler
-    
-    public function __construct(ContainerInterface $container) {
+
+    /**
+     * bbcode handler
+     * 
+     * @var resource
+     */
+    protected $handler;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
         $this->container = $container;
     }
-    
+
     /**
      * Adds smiles to handler
+     * 
+     * @return BBCodeParser
      */
-    protected function addSmiles() {
+    protected function addSmiles()
+    {
         $path = $this->container->get('templating.helper.assets')->getUrl('/bundles/valantirforum/plugin/sceditor/emoticons/');
 
         foreach($this->smiles as $smile => $filename) {
             $tag = '<img src="' . $path . $filename . '" alt="' . $smile . '" />';
             bbcode_add_smiley($this->handler, $smile, $tag);
         }
+
+        return $this;
     }
-    
+
     /**
      * Converts bbcode to html
      * 
      * @param string $text
+     * 
+     * @return string
      */
-    public function bb2html($text) {
+    public function bb2html($text)
+    {
         $this->handler = bbcode_create($this->tags);
         $this->addSmiles();
         $parsedText = bbcode_parse($this->handler, $text);
         bbcode_destroy($this->handler);
+
         return $parsedText;
     }
-    
+
     /**
      * Img callback
      * 
      * @param string $content
      * @param string $param
+     * 
+     * @return string
      */
-    public static function parseImg($content = '', $param = '') {
+    public static function parseImg($content = '', $param = '')
+    {
         $sizes = explode('x', $param);
         $return = '';
-        if(empty($sizes)) {
+
+        if (empty($sizes)) {
             return $param;
         }
-        
-        if(isset($sizes[0])) {
+
+        if (isset($sizes[0])) {
             $return .= ' width="' . $sizes[0] . '"';
         }
-        
-        if(isset($sizes[1])) {
+
+        if (isset($sizes[1])) {
             $return .= ' height="' . $sizes[1] . '"';
         }
+
         return $return;
     }
 }

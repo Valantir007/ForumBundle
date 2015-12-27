@@ -6,9 +6,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TopicType extends AbstractType {
-    
-    public function buildForm(FormBuilderInterface $builder, array $options) {
+/**
+ * Form for topic
+ *
+ * @author Kamil Demurat
+ */
+class TopicType extends AbstractType
+{
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
         $builder
             ->add('name', null, array(
                 'required' => false,
@@ -39,14 +49,22 @@ class TopicType extends AbstractType {
             ))
         ;
     }
-    
-    public function configureOptions(OptionsResolver $resolver) {
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'data_class' => 'Valantir\ForumBundle\Entity\Topic',
         ));
     }
-    
-    public function getName() {
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
         return 'topic_type';
     }
 }
