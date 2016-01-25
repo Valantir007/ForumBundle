@@ -51,9 +51,9 @@ forum:
     list: Forum
     has:
         been:
-            edited: Forum został zedytowany
-            created: Forum został dodany
-            removed: Forum został usunięty
+            edited: Forum zostało zedytowane
+            created: Forum zostało dodane
+            removed: Forum zostało usunięte
 post:
     has:
         not:
@@ -72,6 +72,6 @@ forum:
     has:
         not:
             been:
-                edited: Forum nie został zedytowany
-                created: Forum nie został dodany
-                removed: Forum nie został usunięty
+                edited: Forum nie zostało zedytowane
+                created: Forum nie zostało dodane
+                removed: Forum nie zostało usunięte

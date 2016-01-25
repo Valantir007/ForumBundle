@@ -48,5 +48,7 @@
             <lifecycle-callback type="prePersist" method="prePersist" />
             <lifecycle-callback type="preUpdate" method="preUpdate" />
         </lifecycle-callbacks>
+
+        <gedmo:soft-deleteable field-name="deletedAt" time-aware="false" />
     </entity>
 </doctrine-mapping>

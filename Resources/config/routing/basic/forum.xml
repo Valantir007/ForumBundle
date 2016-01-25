@@ -8,4 +8,8 @@
         <default key="_controller">ValantirForumBundle:Forum:index</default>
         <default key="slug"></default>
     </route>
+
+    <route id="forum_delete" path="/delete/{slug}">
+        <default key="_controller">ValantirForumBundle:Forum:deleteForum</default>
+    </route>
 </routes>

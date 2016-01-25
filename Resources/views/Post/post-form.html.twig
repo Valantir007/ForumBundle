@@ -1,1 +1,3 @@
-{{ form(form) }}
+{% if form is defined and form %}
+    {{ form(form) }}
+{% endif %}

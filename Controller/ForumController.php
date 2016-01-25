@@ -53,25 +53,29 @@ class ForumController extends Controller
 
         $forumsQuery = $this->getForumManager()->findForums(($slug) ? $slug : null); //we create query and pass to paginator
 
-        if ($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
+        if ($this->isLoggedAsAdmin()) {
             $forum = new Forum();
             $forumForm = $this->createForm('forum_type', $forum);
             $this->addForum($forumForm, $forum, ($currentForum) ? $currentForum->getId() : null); //call method to add forum
         }
 
-        $topic = new Topic();
-        $topic->setForum($currentForum);
-        $post = new Post();
-        $post->setAuthor($this->getUser());
-        $topic->addPost($post);
+        $topicForm = false;
+        if ($this->isLogged()) {
+            $topic = new Topic();
+            $topic->setForum($currentForum);
+            $post = new Post();
+            $post->setAuthor($this->getUser());
+            $topic->addPost($post);
 
-        $topicForm = $this->createForm('topic_type', $topic);        
-        $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
+            $topicForm = $this->createForm('topic_type', $topic);        
+            $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
+        }
 
         $pagination = $this->paginator->paginate(
             $forumsQuery,
             $this->request->query->getInt('page', 1),
-            10
+            10,
+            array('wrap-queries' => true)
         );
 
         $forumsIds = array();
@@ -84,11 +88,52 @@ class ForumController extends Controller
 
         return $this->render('ValantirForumBundle:Forum:index.html.twig', array(
             'forums' => $pagination,
-            'forumForm' => ($this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) ? $forumForm->createView() : null,
-            'topicForm' => ($currentForum && $currentForum->getId()) ? $topicForm->createView() : null,
+            'forumForm' => ($this->get('security.authorization_checker')->isGranted('ROLE_FORUM_ADMIN')) ? $forumForm->createView() : null,
+            'topicForm' => ($topicForm && $currentForum && $currentForum->getId()) ? $topicForm->createView() : null,
             'lastPosts' => $lastPosts,
             'forumId' => ($currentForum) ? $currentForum->getId() : null
         ));
+    }
+
+    /**
+     * Deletes forum by slug
+     * 
+     * @param string $slug
+     * 
+     * @return RedirectResponse
+     * 
+     * @throws Exception
+     */
+    public function deleteForumAction($slug)
+    {
+        $forum = $this->getForumManager()->findOneBy(array('slug' => $slug));
+
+        if (!$forum) {
+            throw $this->createNotFoundException(sprintf('Forum with slug %s does not exists', $slug));
+        }
+
+        if (!$this->isLoggedAsAdmin()) {
+            $this->denyAccessUnlessGranted('ROLE_FORUM_ADMIN', null, 'Unable to access this page!');
+        }
+
+        $parentSlug = ($forum->getParent()) ? $forum->getParent()->getSlug() : null;
+
+        try {
+            $this->getForumManager()->remove($forum);
+            $this->addFlash(
+                'success',
+                $this->translator->trans('forum.has.been.removed')
+            );
+        } catch (Exception $ex) {
+            $this->addFlash(
+                'danger',
+                $this->translator->trans('forum.has.not.been.removed')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('forum_index', array(
+            'slug' => $parentSlug
+        )));
     }
 
     /**
@@ -158,6 +203,28 @@ class ForumController extends Controller
                 'parent' => $parent
             )));
         }
+
+        return;
+    }
+
+    /**
+     * Checks user is logged in
+     * 
+     * @return boolean
+     */
+    protected function isLogged()
+    {
+        return $this->get('security.authorization_checker')->isGranted('ROLE_USER');
+    }
+
+    /**
+     * Checks user is logged as admin of forum
+     * 
+     * @return boolean
+     */
+    protected function isLoggedAsAdmin()
+    {
+        return $this->get('security.authorization_checker')->isGranted('ROLE_FORUM_ADMIN');
     }
 
     /**

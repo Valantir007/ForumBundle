@@ -47,7 +47,7 @@ class PostController extends Controller
      */
     public function editAction($id, $page = null)
     {
-        if(!$this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
+        if(!$this->get('security.authorization_checker')->isGranted('ROLE_FORUM_ADMIN')) {
             throw $this->createAccessDeniedException('Unable to access this page!');
         }
 
@@ -99,7 +99,7 @@ class PostController extends Controller
             throw $this->createNotFoundException(sprintf('Post with id %s does not exists', $id));
         }
 
-        if (!$this->get('security.context')->isGranted('ROLE_FORUM_ADMIN')) {
+        if (!$this->get('security.authorization_checker')->isGranted('ROLE_FORUM_ADMIN')) {
             throw $this->createAccessDeniedException('Unable to access this action!');
         }
 

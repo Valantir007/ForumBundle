@@ -68,10 +68,11 @@ class ForumRequestListener
             $parameterName = $this->readedTopicRoutes[$request->get('_route')];
 
             $topic = $this->getTopic($request->get('_route'), $parameterName, $request->get($parameterName));
-
-            if ($topic && $user) {
-                $user->addReadedTopic($topic);
-                $this->userManager->update($user);
+            if ($this->securityContext->isGranted('ROLE_USER')) {
+                if ($topic && $user) {
+                    $user->addReadedTopic($topic);
+                    $this->userManager->update($user);
+                }
             }
         }
     }

@@ -17,4 +17,8 @@
     <route id="topic_show" path="/{slug}">
         <default key="_controller">ValantirForumBundle:Topic:showTopic</default>
     </route>
+
+    <route id="topic_delete" path="/delete/{slug}">
+        <default key="_controller">ValantirForumBundle:Topic:deleteTopic</default>
+    </route>
 </routes>

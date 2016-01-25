@@ -12,6 +12,7 @@ use Valantir\ForumBundle\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\DataCollectorTranslator;
 use Knp\Component\Pager\Paginator;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use \Exception;
 
 /**
@@ -50,7 +51,8 @@ class TopicController extends Controller
         $pagination = $this->paginator->paginate(
             $topicsQuery,
             $this->request->query->getInt('page', 1),
-            10
+            10,
+            array('wrap-queries' => true)
         );
 
         $topicsIds = array();
@@ -58,7 +60,11 @@ class TopicController extends Controller
             $topicsIds[] = $topic[0]->getId();
         }
 
-        $readedTopics = $this->getTopicManager()->readedTopics($topicsIds, $this->getUser()->getId());
+        $readedTopics = array();
+        if ($this->getUser()) {
+            $readedTopics = $this->getTopicManager()->readedTopics($topicsIds, $this->getUser()->getId());
+        }
+
         $lastPosts = $this->getPostManager()->getTopicsLastPosts($topicsIds);
 
         return $this->render('ValantirForumBundle:Topic:index.html.twig', array(
@@ -74,7 +80,7 @@ class TopicController extends Controller
      * @param string   $slug
      * @param int|null $quotationPostId
      * 
-     * @return Response
+     * @return Response|RedirectResponse
      * 
      * @throws Exception
      */
@@ -106,34 +112,36 @@ class TopicController extends Controller
             $this->generateBreadcrumb($topic, $this->translator->trans('addition.post'));
         }
 
-        $postForm = $this->createForm('post_type', $post);
-        $postForm->handleRequest($this->request);
+        if ($this->isLogged()) {
+            $postForm = $this->createForm('post_type', $post);
+            $postForm->handleRequest($this->request);
 
-        if (!$editingPost) { //if the post is edited, form is not checked.
-            if ($postForm->isValid()) {
-                try {
-                    $post->setAuthor($this->getUser());
-                    $post->setTopic($topic);
-                    $this->getPostManager()->update($post);
-                    $this->addFlash(
-                        'success',
-                        $this->translator->trans('post.has.been.created')
-                    );
-                } catch (Exception $ex) {
-                    $this->addFlash(
-                        'danger',
-                        $this->translator->trans('post.has.not.been.created')
-                    );
+            if (!$editingPost) { //if the post is edited, form is not checked.
+                if ($postForm->isValid()) {
+                    try {
+                        $post->setAuthor($this->getUser());
+                        $post->setTopic($topic);
+                        $this->getPostManager()->update($post);
+                        $this->addFlash(
+                            'success',
+                            $this->translator->trans('post.has.been.created')
+                        );
+                    } catch (Exception $ex) {
+                        $this->addFlash(
+                            'danger',
+                            $this->translator->trans('post.has.not.been.created')
+                        );
+                    }
+
+                    $templateParameters = array('slug' => $topic->getSlug());
+                    //we check page and if page > 1 then add page parameter to route
+                    $page = ceil($this->getPostManager()->countPostsInTopic($topic->getId())/10);
+                    if ($page > 1) {
+                        $templateParameters['page'] = $page;
+                    }
+
+                    return $this->redirect($this->generateUrl('topic_show', $templateParameters));
                 }
-
-                $templateParameters = array('slug' => $topic->getSlug());
-                //we check page and if page > 1 then add page parameter to route
-                $page = ceil($this->getPostManager()->countPostsInTopic($topic->getId())/10);
-                if ($page > 1) {
-                    $templateParameters['page'] = $page;
-                }
-
-                return $this->redirect($this->generateUrl('topic_show', $templateParameters));
             }
         }
 
@@ -142,16 +150,78 @@ class TopicController extends Controller
         $pagination = $this->paginator->paginate(
             $postsQuery,
             $this->request->get('page', 1),
-            10
+            10,
+            array('wrap-queries' => true)
         );
 
         return $this->render('ValantirForumBundle:Topic:show.html.twig', array(
             'posts' => $pagination,
-            'postForm' => $postForm->createView(),
+            'postForm' => ($this->isLogged()) ? $postForm->createView() : false,
             'topic' => $topic,
             'page' => $this->request->get('page', 1),
             'editingPost' => $editingPost
         ));
+    }
+
+    /**
+     * Deletes topic by slug
+     * 
+     * @param string $slug
+     * 
+     * @return RedirectResponse
+     * 
+     * @throws Exception
+     */
+    public function deleteTopicAction($slug)
+    {
+        $topic = $this->getTopicManager()->findOneBy(array('slug' => $slug));
+
+        if (!$topic) {
+            throw $this->createNotFoundException(sprintf('Topic with slug %s does not exists', $slug));
+        }
+
+        if (!$this->isLoggedAsAdmin()) {
+            $this->denyAccessUnlessGranted('ROLE_FORUM_ADMIN', null, 'Unable to access this page!');
+        }
+
+        $parentSlug = $topic->getForum()->getSlug();
+
+        try {
+            $this->getTopicManager()->remove($topic);
+            $this->addFlash(
+                'success',
+                $this->translator->trans('topic.has.been.removed')
+            );
+        } catch (Exception $ex) {
+            $this->addFlash(
+                'danger',
+                $this->translator->trans('topic.has.not.been.removed')
+            );
+        }
+
+        return $this->redirect($this->generateUrl('forum_index', array(
+            'slug' => $parentSlug
+        )));
+    }
+
+    /**
+     * Checks user is logged in
+     * 
+     * @return boolean
+     */
+    protected function isLogged()
+    {
+        return $this->get('security.authorization_checker')->isGranted('ROLE_USER');
+    }
+
+    /**
+     * Checks user is logged as admin of forum
+     * 
+     * @return boolean
+     */
+    protected function isLoggedAsAdmin()
+    {
+        return $this->get('security.authorization_checker')->isGranted('ROLE_FORUM_ADMIN');
     }
 
     /**

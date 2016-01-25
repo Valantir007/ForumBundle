@@ -17,7 +17,8 @@
         "stof/doctrine-extensions-bundle": "1.2.*@dev",
         "jms/di-extra-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "~2.4",
-        "doctrine/dbal": "<2.5"
+        "doctrine/dbal": "<2.5",
+        "symfony/symfony": ">=2.8.*"
     },
     "autoload" : {
         "psr-0" : {
@@ -29,7 +30,7 @@
     }],
     "extra" : {
     "branch-alias" : {
-            "dev-master" : "1.0.x-dev"
+            "dev-master" : "1.1.x-dev"
         }
     }
 }

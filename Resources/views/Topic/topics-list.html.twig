@@ -31,6 +31,11 @@
                 {% else %}
                     {{ 'no.posts'|trans }}
                 {% endif %}
+                {% if is_granted('ROLE_FORUM_ADMIN') %}
+                    <div>
+                        <a href="{{ path('topic_delete', {'slug': topic.slug}) }}" class="btn btn-default">{{ 'action.remove'|trans }}</a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
