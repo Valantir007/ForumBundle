@@ -3,6 +3,7 @@
 namespace Valantir\ForumBundle\Twig;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Valantir\ForumBundle\Service\BBCodeParserInterface;
 
 /**
  * Class to parse bbcode to html
@@ -17,11 +18,18 @@ class BB2HtmlExtension extends \Twig_Extension
     protected $container;
 
     /**
+     * @var BBCodeParserInterface
+     */
+    protected $parser;
+
+    /**
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
+        $bundleConfiguration = $this->container->getParameter('valantir_forum');
+        $this->parser = $this->container->get($bundleConfiguration['parser']);
     }
 
     /**
@@ -41,7 +49,7 @@ class BB2HtmlExtension extends \Twig_Extension
      */
     public function bb2html($text)
     {
-        return $this->container->get('bb_code_parser')->bb2html($text);
+        return $this->parser->bb2html($text);
     }
 
     /**

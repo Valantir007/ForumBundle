@@ -5,11 +5,15 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="bb_code_parser" class="Valantir\ForumBundle\Service\BBCodeParser">
+        <service id="breadcrumb_service" class="Valantir\ForumBundle\Service\Breadcrumb">
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="breadcrumb_service" class="Valantir\ForumBundle\Service\Breadcrumb">
+        <service id="bb_code_extension_parser" class="Valantir\ForumBundle\Service\BBCodeExtensionParser">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="bb_code_golonka_parser" class="Valantir\ForumBundle\Service\BBCodeGolonkaParser">
             <argument type="service" id="service_container"/>
         </service>
     </services>

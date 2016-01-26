@@ -5,13 +5,11 @@ namespace Valantir\ForumBundle\Service;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class to parse bbcode
- * 
- * TODO: Write parser without bb_code extension
+ * Class to parse bbcode using php bbcode extension
  *
  * @author Kamil Demurat
  */
-class BBCodeParser
+class BBCodeExtensionParser extends AbstractParser
 {
     /**
      * Tags to replace
@@ -95,6 +93,11 @@ class BBCodeParser
     protected $handler;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -120,11 +123,7 @@ class BBCodeParser
     }
 
     /**
-     * Converts bbcode to html
-     * 
-     * @param string $text
-     * 
-     * @return string
+     * {@inheritdoc}
      */
     public function bb2html($text)
     {
