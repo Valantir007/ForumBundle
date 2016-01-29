@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- src/Acme/UserBundle/Resources/config/doctrine/User.orm.xml -->
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd"
+    xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
+
+    <entity name="Valantir\ForumBundle\Entity\PostVote" table="valantir_forum_post_vote">
+        <id name="user" association-key="true" />
+        <id name="post" association-key="true" />
+
+        <field name="createdAt" column="created_at" type="datetime" />
+        <field name="kind" column="kind" type="boolean" />
+
+        <many-to-one field="user" target-entity="User" inversed-by="postsVotes">
+            <join-column name="user_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+        
+        <many-to-one field="post" target-entity="Post" inversed-by="votes">
+            <join-column name="post_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+
+        <lifecycle-callbacks>
+            <lifecycle-callback type="prePersist" method="prePersist" />
+        </lifecycle-callbacks>
+    </entity>
+</doctrine-mapping>

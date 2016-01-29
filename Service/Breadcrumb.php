@@ -37,7 +37,7 @@ class Breadcrumb
     protected $router;
 
     /**
-     * Set container and router
+     * Sets container and router
      * 
      * @param ContainerInterface $container
      */
@@ -64,12 +64,9 @@ class Breadcrumb
 
         switch (true) {
             case ($object instanceof Forum):
-                $forums = $this->getForumManager()->findAncestors($object->getRoot(), $object->getRight());
-                if ($forums) {
-                    foreach($forums as $forum) {
-                        $this->addItem('forum_index', $forum);
-                    }
-                }
+                $this->generateBreadcrumb($object->getParent());
+                $this->addItem('forum_index', $object);
+                $this->addLastItem($lastText);
                 break;
             case ($object instanceof Topic):
                 $this->generateBreadcrumb($object->getForum());

@@ -1,0 +1,30 @@
+<div class="row forum-row {{ child ? 'child-row' }}">
+    <div class="col-md-4 forum-col">
+        <a href="{{ path('forum_index', {'slug': forum.slug }) }}">{{ forum.name }}</a>
+        <div class="small">
+            {{ forum.description }}
+        </div>
+    </div>
+    <div class="col-md-4 forum-col">
+        <div>
+            {{ 'topics.count'|transchoice(counts[forum.id].topicsCount) }}
+        </div>
+        <div>
+            {{ 'posts.count'|transchoice(counts[forum.id].postsCount) }}
+        </div>
+    </div>
+    <div class="col-md-4 forum-col">
+        {% if lastPosts[forum.id] is defined %}
+            {% trans with {'%author%': lastPosts[forum.id].author.username, '%date%': lastPosts[forum.id].createdAt|date('Y-m-d H:i:s')} %}
+                last.post.send.by.%author%.on.%date%
+            {% endtrans %}
+        {% else %}
+            {{ 'no.posts'|trans }}
+        {% endif %}
+        {% if is_granted('ROLE_FORUM_ADMIN') %}
+            <div>
+                <a href="#" data-href="{{ path('forum_delete', {'slug': forum.slug}) }}" class="btn btn-default" data-toggle="modal" data-target="#confirm-remove" data-modaltitle="{{ 'forum.removing'|trans }}" data-modalbody="{{ 'are.you.sure.you.want.to.remove.this.forum'|trans }}">{{ 'action.remove'|trans }}</a>
+            </div>
+        {% endif %}
+    </div>
+</div>

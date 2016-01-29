@@ -46,6 +46,7 @@ class MappingListener
             $this->setForumAssociation($classMetadata);
             $this->setTopicAssociation($classMetadata);
             $this->setPostAssociation($classMetadata);
+            $this->setPostVoteAssociation($classMetadata);
         }
 
         if (!$assocName) {
@@ -139,6 +140,20 @@ class MappingListener
             'targetEntity' => 'Valantir\ForumBundle\Entity\Post',
             'fieldName' => 'posts',
             'mappedBy' => 'author',
+        ));
+    }
+
+    /**
+     * Adds post vote association mapping to User class
+     * 
+     * @param ClassMetadata $classMetadata
+     */
+    protected function setPostVoteAssociation(ClassMetadata $classMetadata)
+    {
+        $classMetadata->mapOneToMany(array(
+            'targetEntity' => 'Valantir\ForumBundle\Entity\PostVote',
+            'fieldName' => 'postsVotes',
+            'mappedBy' => 'user',
         ));
     }
 }

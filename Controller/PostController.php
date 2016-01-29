@@ -2,14 +2,17 @@
 
 namespace Valantir\ForumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Valantir\ForumBundle\Manager\PostManager;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Valantir\ForumBundle\Manager\PostVoteManager;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Valantir\ForumBundle\Manager\PostManager;
+use Valantir\ForumBundle\Entity\PostVote;
 use Knp\Component\Pager\Paginator;
 use \Exception;
 
@@ -78,7 +81,7 @@ class PostController extends Controller
 
         $slug = $post->getTopic()->getSlug();
 
-        //forward to another controller, becouse there is logic of update and display template
+        //forward to another controller, because there is logic of update and display template
         return $this->forward('ValantirForumBundle:Topic:showTopic', array('slug' => $slug, 'editPost' => $id, 'page' => $page));
     }
 
@@ -122,6 +125,115 @@ class PostController extends Controller
     }
 
     /**
+     * Vote down
+     * 
+     * @param integer $id
+     * 
+     * @return JsonResponse|RedirectResponse
+     * 
+     * @throws Exception
+     */
+    public function voteDownAction($id)
+    {
+        try {
+            if (!$this->isLogged()) {
+                throw $this->createAccessDeniedException('Unable to access this page!');
+            }
+
+            $post = $this->getPostManager()->find($id);
+
+            if (!$post) {
+                throw $this->createNotFoundException(sprintf('Post with id %s does not exists', $id));
+            }
+
+            $postVote = $this->getPostVoteManager()->findVoteForPost($post->getId(), $this->getUser()->getId());
+            if (!$postVote) {
+                $postVote = new PostVote();
+                $postVote->setPost($post);
+            }
+
+            $postVote->setKind(0);
+            $this->getPostVoteManager()->update($postVote);
+
+            $result = array(
+                'result' => true,
+                'message' => $this->translator->trans('thank.you.for.your.vote')
+            );
+        } catch(Exception $ex) {
+            throw $ex;
+            $result = array(
+                'result' => false,
+                'message' => $this->translator->trans('an.error.occurred.please.try.again.later')
+            );
+        }
+
+        if($this->request->isXmlHttpRequest()) {
+            return new JsonResponse($result);
+        }
+
+        $this->addFlash(
+            ($result['result']) ? 'success' : 'danger',
+            $result['message']
+        );
+
+        return $this->redirect($this->generateUrl('topic_show', array('slug' => $post->getTopic()->getSlug())));
+    }
+
+    /**
+     * Vote up
+     * 
+     * @param integer $id
+     * 
+     * @return JsonResponse|RedirectResponse
+     * 
+     * @throws Exception
+     */
+    public function voteUpAction($id) {
+        try {
+            if (!$this->isLogged()) {
+                throw $this->createAccessDeniedException('Unable to access this page!');
+            }
+
+            $post = $this->getPostManager()->find($id);
+
+            if (!$post) {
+                throw $this->createNotFoundException(sprintf('Post with id %s does not exists', $id));
+            }
+
+            $postVote = $this->getPostVoteManager()->findVoteForPost($post->getId(), $this->getUser()->getId());
+            if (!$postVote) {
+                $postVote = new PostVote();
+                $postVote->setPost($post);
+            }
+
+            $postVote->setKind(1);
+            $this->getPostVoteManager()->update($postVote);
+
+            $result = array(
+                'result' => true,
+                'message' => $this->translator->trans('thank.you.for.your.vote')
+            );
+        } catch(Exception $ex) {
+            throw $ex;
+            $result = array(
+                'result' => false,
+                'message' => $this->translator->trans('an.error.occurred.please.try.again.later')
+            );
+        }
+
+        if($this->request->isXmlHttpRequest()) {
+            return new JsonResponse($result);
+        }
+
+        $this->addFlash(
+            ($result['result']) ? 'success' : 'danger',
+            $result['message']
+        );
+        
+        return $this->redirect($this->generateUrl('topic_show', array('slug' => $post->getTopic()->getSlug())));
+    }
+
+    /**
      * Returns post manager
      * 
      * @return PostManager
@@ -129,5 +241,25 @@ class PostController extends Controller
     private function getPostManager()
     {
         return $this->get('manager.valantir.post');
+    }
+
+    /**
+     * Returns post vote manager
+     * 
+     * @return PostVoteManager
+     */
+    private function getPostVoteManager()
+    {
+        return $this->get('manager.valantir.post.vote');
+    }
+
+    /**
+     * Checks user is logged in
+     * 
+     * @return boolean
+     */
+    protected function isLogged()
+    {
+        return $this->get('security.authorization_checker')->isGranted('ROLE_USER');
     }
 }

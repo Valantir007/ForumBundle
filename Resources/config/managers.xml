@@ -22,6 +22,11 @@
             <argument>Valantir\ForumBundle\Entity\Post</argument>
         </service>
 
+        <service id="manager.valantir.post.vote" class="Valantir\ForumBundle\Manager\PostVoteManager">
+            <argument type="service" id="base.valantir.entity_manager" />
+            <argument>Valantir\ForumBundle\Entity\PostVote</argument>
+        </service>
+
         <service id="manager.valantir.user" class="Valantir\ForumBundle\Manager\UserManager">
             <argument type="service" id="base.valantir.entity_manager" />
             <argument type="service" id="service_container" />

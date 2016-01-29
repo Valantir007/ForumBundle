@@ -23,13 +23,30 @@
             {{ breadcrumb() }}
             {% block body %}{% endblock body %}
         </div>
-        
+        {% block modal %}
+            <div class="modal fade" id="confirm-remove" tabindex="-1" role="dialog" aria-labelledby="ConfirmRemove" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            {{ modalTitle is defined ? modalTitle }}
+                        </div>
+                        <div class="modal-body">
+                            {{ modalBody is defined ? modalBody }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'cancel'|trans }}</button>
+                            <a class="btn btn-danger btn-ok">{{ 'remove'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endblock modal %}
         {% block javascripts %}
             <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
             <script src="{{ asset('bundles/valantirforum/plugin/sceditor/minified/jquery.sceditor.bbcode.min.js') }}"></script>
             <script src="{{ asset('bundles/valantirforum/plugin/sceditor/languages/' ~ app.request.locale ~ '.js') }}"></script>
-            <script src="{{ asset('bundles/valantirforum/js/admin-forum.js') }}"></script>
+            <script src="{{ asset('bundles/valantirforum/js/forum.js') }}"></script>
         {% endblock javascripts %}
      </body>
 </html>

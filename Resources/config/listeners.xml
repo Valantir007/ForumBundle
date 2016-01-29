@@ -9,7 +9,13 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onRequest" />
             <argument type="service" id="manager.valantir.topic" />
             <argument type="service" id="manager.valantir.user" />
-            <argument type="service" id="security.context" />
+            <argument type="service" id="security.token_storage" />
+            <argument type="service" id="security.authorization_checker" />
+        </service>
+
+        <service id="pre.persist.forum.component.listener" class="Valantir\ForumBundle\Listener\PrePersistListener">
+            <tag name="doctrine.event_listener" event="prePersist" />
+            <argument type="service" id="security.token_storage" />
         </service>
     </services>
 

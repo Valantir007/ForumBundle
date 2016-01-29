@@ -15,6 +15,7 @@
 .display-table {
     display: table;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 .forum-row {
@@ -83,4 +84,16 @@
 
 .author .author-avatar img {
     max-width: 100px;
+}
+
+.row.forum-row.child-row > .forum-col:first-child {
+    padding-left: 30px;
+}
+
+.vote-down {
+    color: red;
+}
+
+.vote-up {
+    color: green;
 }

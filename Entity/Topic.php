@@ -13,6 +13,17 @@ use \DateTime;
 class Topic extends BasicTopic
 {
     /**
+     * {@inheritdoc}
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        if ($this->getPosts()->isEmpty()) {
+            $this->addPost(new Post());
+        }
+    }
+
+    /**
      * @return string
      */
     public function __toString()

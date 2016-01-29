@@ -11,17 +11,28 @@
     </div>
 </div>
 
-<div class="display-table posts-list">
+<div class="display-table posts-list" {{ (scroll) ? 'data-scroll="1"' }}>
     {% for post in posts %}
         <div class="row forum-row">
             <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
                 <div class="author small text-center">
                     {% if post.author.avatar %}
                         <div class="author-avatar">
-                            <img src="{{ post.author.avatar }}"/>
+                            <img src="{{ asset(post.author.avatar) }}"/>
                         </div>
                     {% endif %}
                     {{ post.author.username }}
+                    <div>
+                        {{ 'posts.count'|transchoice(post.author.posts.count) }}
+                    </div>
+                    <div class="votes">
+                        <div class="btn-group" role="group">
+                            {% set votesSum = votes[post.id] is defined ? votes[post.id]['up'] - votes[post.id]['down'] : 0 %}
+                            <a href="{{ path('post_vote_down', {'id': post.id}) }}" class="btn btn-xs btn-default vote vote-down">-</a>
+                            <span class="btn btn-xs btn-default {{ votesSum > 0 ? 'vote-up' }} {{ votesSum < 0 ? 'vote-down' }}">{{ votesSum }}</span>
+                            <a href="{{ path('post_vote_up', {'id': post.id}) }}" class="btn btn-xs btn-default vote vote-up">+</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-10 forum-col">
@@ -35,11 +46,11 @@
                         <div class="bb2html">
                             <div class="btn-group btn-group-sm pull-right" role="group" aria-label="Large button group">
                                 {% if is_granted('ROLE_USER') %}
-                                    <a href="{{ path('topic_show_quotation', {'slug': topic.slug, 'quotationPostId': post.id, 'page': page}) }}" rel="nofollow" class="btn btn-default">{{ 'action.quote'|trans }}</a>
+                                    <a href="{{ path('topic_show_quotation', {'slug': topic.slug, 'quotationPostId': post.id, 'page': page}) }}" class="btn btn-default">{{ 'action.quote'|trans }}</a>
                                 {% endif %}
                                 {% if is_granted('ROLE_FORUM_ADMIN') %}
-                                    <a href="{{ path('post_edit', {'id': post.id, 'page': page}) }}" rel="nofollow" class="btn btn-default">{{ 'action.edit'|trans }}</a>
-                                    <a href="{{ path('post_remove', {'id': post.id}) }}" rel="nofollow" class="btn btn-default">{{ 'action.remove'|trans }}</a>
+                                    <a href="{{ path('post_edit', {'id': post.id, 'page': page}) }}" class="btn btn-default">{{ 'action.edit'|trans }}</a>
+                                    <a href="#" data-href="{{ path('post_remove', {'id': post.id}) }}" class="btn btn-default" data-toggle="modal" data-target="#confirm-remove">{{ 'action.remove'|trans }}</a>
                                 {% endif %}
                             </div>
                             {{ post.description|bb2html|raw }}

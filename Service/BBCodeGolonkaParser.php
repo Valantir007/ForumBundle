@@ -42,6 +42,10 @@ class BBCodeGolonkaParser extends AbstractParser
             'pattern' => '/\[img=(.*?)x(.*?)\](.*?)\[\/img\]/s',
             'replace' => '<img width="$1" height="$2" src="$3">'
         ),
+        'image_clear' => array(
+            'pattern' => '/\[img\](.*?)\[\/img\]/s',
+            'replace' => '<img src="$1">'
+        ),
         'ul' => [
             'pattern' => '/\[ul\](.*?)\[\/ul\]/s',
             'replace' => '<ul>$1</ul>'

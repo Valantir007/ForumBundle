@@ -1,10 +1,11 @@
-$(document).ready(function(){
+(function ($) {
     var Forum = function(){};
     Forum.prototype = {
         init: function() {
             this.callTabs();
             this.addBbEditor();
-//            this.bb2html();
+            this.scrollToEditor();
+            this.confirmationModal();
         },
         callTabs: function() {
             $('.nav-tabs a').click(function (e) {
@@ -21,22 +22,22 @@ $(document).ready(function(){
                 emoticonsRoot: "/bundles/valantirforum/plugin/sceditor/",
                 toolbar: 'bold,italic,underline,strike|subscript,superscript|left,center,right,justify|font,size,color,removeformat|cut,copy,paste,pastetext|bulletlist,orderedlist|table,code,quote|image,email,link,unlink,emoticon,youtube|date,time|ltr,rtl|print,maximize|source'
             });
-//            $editor.sceditor('instance').width('100%');
-//            $('.bb-editor').wysibb({
-//                allButtons: {
-//                    numlist : { //change ol tag from [list=1] to [ol]
-//                        title: CURLANG.numlist,
-//                        buttonHTML: '<span class="fonticon ve-tlb-numlist1">\uE00a</span>',
-//                        excmd: 'insertOrderedList',
-//                        transform : {
-//                            '<ol>{SELTEXT}</ol>':"[ol]{SELTEXT}[/ol]",
-//                            '<li>{SELTEXT}</li>':"[*]{SELTEXT}[/*]"
-//                        }
-//                    }
-//                }
-//            });
         },
+        scrollToEditor: function() {
+            if ($('[data-scroll="1"]').length) {
+                $('html, body').animate({
+                    scrollTop: $("form[name='post_type']").offset().top
+                }, 2000);
+            }
+        },
+        confirmationModal: function() {
+            $('#confirm-remove').on('show.bs.modal', function(e) {
+                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                $('#confirm-remove .modal-header').html($(e.relatedTarget).data('modaltitle'));
+                $('#confirm-remove .modal-body').html($(e.relatedTarget).data('modalbody'));
+            });
+        }
     };
     var forum = new Forum();
     forum.init();
-});
+}( jQuery ));

@@ -2,17 +2,18 @@
 
 namespace Valantir\ForumBundle\Controller;
 
+use Symfony\Component\Translation\DataCollectorTranslator;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Valantir\ForumBundle\Entity\Post;
-use Valantir\ForumBundle\Entity\Topic;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Valantir\ForumBundle\Manager\PostVoteManager;
 use Symfony\Component\HttpFoundation\Response;
 use Valantir\ForumBundle\Manager\TopicManager;
 use Valantir\ForumBundle\Manager\PostManager;
 use Valantir\ForumBundle\Manager\UserManager;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Translation\DataCollectorTranslator;
+use Valantir\ForumBundle\Entity\Post;
+use Valantir\ForumBundle\Entity\Topic;
 use Knp\Component\Pager\Paginator;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use \Exception;
 
 /**
@@ -119,7 +120,6 @@ class TopicController extends Controller
             if (!$editingPost) { //if the post is edited, form is not checked.
                 if ($postForm->isValid()) {
                     try {
-                        $post->setAuthor($this->getUser());
                         $post->setTopic($topic);
                         $this->getPostManager()->update($post);
                         $this->addFlash(
@@ -145,21 +145,26 @@ class TopicController extends Controller
             }
         }
 
-        $postsQuery = $this->getPostManager()->findPostsByTopic($topic->getId());
-
         $pagination = $this->paginator->paginate(
-            $postsQuery,
+            $this->getPostManager()->findPostsByTopic($topic->getId()),
             $this->request->get('page', 1),
             10,
             array('wrap-queries' => true)
         );
+
+        $postsIds = array_map(function($post){
+            return $post->getId();
+        },
+        $pagination->getItems());
 
         return $this->render('ValantirForumBundle:Topic:show.html.twig', array(
             'posts' => $pagination,
             'postForm' => ($this->isLogged()) ? $postForm->createView() : false,
             'topic' => $topic,
             'page' => $this->request->get('page', 1),
-            'editingPost' => $editingPost
+            'editingPost' => $editingPost,
+            'scroll' => ($editingPost || $quotationPostId),
+            'votes' => $this->getPostVoteManager()->getVotesOfPosts($postsIds)
         ));
     }
 
@@ -264,6 +269,16 @@ class TopicController extends Controller
     private function getPostManager()
     {
         return $this->get('manager.valantir.post');
+    }
+
+    /**
+     * Returns post vote manager
+     * 
+     * @return PostVoteManager
+     */
+    private function getPostVoteManager()
+    {
+        return $this->get('manager.valantir.post.vote');
     }
 
     /**

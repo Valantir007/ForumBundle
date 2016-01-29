@@ -2,6 +2,7 @@
 
 namespace Valantir\ForumBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use \DateTime;
 
 /**
@@ -46,6 +47,14 @@ class Post
      */
     protected $author;
 
+    /**
+     * @var ArrayCollection
+     */
+    protected $votes;
+
+    public function __construct() {
+        $this->votes = new ArrayCollection();
+    }
     /**
      * @return integer
      */
@@ -166,6 +175,61 @@ class Post
     public function setDeletedAt(DateTime $deletedAt = null)
     {
         $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Gets collection of votes
+     * 
+     * @return ArrayCollection
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+
+    /**
+     * Sets collection of votes
+     * 
+     * @param ArrayCollection $votes
+     * 
+     * @return Post
+     */
+    public function setVotes(ArrayCollection $votes)
+    {
+        $this->votes = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Adds post vote to collection
+     * 
+     * @param PostVote $vote
+     * 
+     * @return Post
+     */
+    public function addVote(PostVote $vote)
+    {
+        if (!$this->postsVotes->contains($vote)) {
+            $vote->addPost($this);
+            $this->postsVotes->add($vote);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Removes post vote from collection
+     * 
+     * @param PostVote $vote
+     * 
+     * @return User
+     */
+    public function removeVote(PostVote $vote)
+    {
+        $this->votes->removeElement($vote);
 
         return $this;
     }

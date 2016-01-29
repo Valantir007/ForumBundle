@@ -7,7 +7,6 @@ use Symfony\Component\Form\Form;
 use Knp\Component\Pager\Paginator;
 use Valantir\ForumBundle\Entity\Forum;
 use Valantir\ForumBundle\Entity\Topic;
-use Valantir\ForumBundle\Entity\Post;
 use Symfony\Component\HttpFoundation\Request;
 use Valantir\ForumBundle\Manager\PostManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +39,7 @@ class ForumController extends Controller
     protected $paginator;
 
     /**
-     * List of forums with topic and forum forms
+     * List of forums with topics and forum forms
      * 
      * @param string $slug
      * 
@@ -50,8 +49,6 @@ class ForumController extends Controller
     {
         $currentForum = $this->getForumManager()->findOneBy(array('slug' => $slug));
         $this->get('breadcrumb_service')->generateBreadcrumb($currentForum); //generate breadcrumb
-
-        $forumsQuery = $this->getForumManager()->findForums(($slug) ? $slug : null); //we create query and pass to paginator
 
         if ($this->isLoggedAsAdmin()) {
             $forum = new Forum();
@@ -63,16 +60,12 @@ class ForumController extends Controller
         if ($this->isLogged()) {
             $topic = new Topic();
             $topic->setForum($currentForum);
-            $post = new Post();
-            $post->setAuthor($this->getUser());
-            $topic->addPost($post);
-
-            $topicForm = $this->createForm('topic_type', $topic);        
+            $topicForm = $this->createForm('topic_type', $topic);
             $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
         }
 
         $pagination = $this->paginator->paginate(
-            $forumsQuery,
+            $this->getForumManager()->findForums(($slug) ? $slug : null), //we create query and pass to paginator
             $this->request->query->getInt('page', 1),
             10,
             array('wrap-queries' => true)
@@ -81,17 +74,20 @@ class ForumController extends Controller
         $forumsIds = array();
 
         foreach ($pagination->getItems() as $paginationForum) {
-            $forumsIds[] = $paginationForum[0]->getId();
+            $forum = $paginationForum[0];
+            $forumsIds[] = $forum->getId();
+            foreach ($forum->getChildren() as $child) {
+                $forumsIds[] = $child->getId();
+            }
         }
-
-        $lastPosts = $this->getPostManager()->getForumsLastPosts($forumsIds); //gets last post per forum
 
         return $this->render('ValantirForumBundle:Forum:index.html.twig', array(
             'forums' => $pagination,
             'forumForm' => ($this->get('security.authorization_checker')->isGranted('ROLE_FORUM_ADMIN')) ? $forumForm->createView() : null,
             'topicForm' => ($topicForm && $currentForum && $currentForum->getId()) ? $topicForm->createView() : null,
-            'lastPosts' => $lastPosts,
-            'forumId' => ($currentForum) ? $currentForum->getId() : null
+            'lastPosts' => $this->getPostManager()->getForumsLastPosts($forumsIds), //gets last post per forum
+            'forumId' => ($currentForum) ? $currentForum->getId() : null,
+            'counts' => $this->getForumManager()->countTopicsAndPosts($slug), //counts of topics and posts
         ));
     }
 
@@ -150,7 +146,6 @@ class ForumController extends Controller
         $forumForm->handleRequest($this->request);
         if ($forumForm->isValid()) {
             try {
-                $forum->setAuthor($this->getUser());
                 $this->getForumManager()->update($forum);
                 $this->addFlash(
                     'success',
@@ -185,7 +180,6 @@ class ForumController extends Controller
         $topicForm->handleRequest($this->request);
         if ($topicForm->isValid()) {
             try {
-                $topic->setAuthor($this->getUser());
                 $this->getTopicManager()->update($topic);
                 $this->addFlash(
                     'success',

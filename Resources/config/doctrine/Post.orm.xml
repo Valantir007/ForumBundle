@@ -23,6 +23,8 @@
             <join-column name="topic_id" referenced-column-name="id" on-delete="CASCADE"/>
         </many-to-one>
 
+        <one-to-many field="votes" target-entity="PostVote" mapped-by="post"/>
+
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="prePersist" />
             <lifecycle-callback type="preUpdate" method="preUpdate" />

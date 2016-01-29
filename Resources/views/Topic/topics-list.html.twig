@@ -33,7 +33,7 @@
                 {% endif %}
                 {% if is_granted('ROLE_FORUM_ADMIN') %}
                     <div>
-                        <a href="{{ path('topic_delete', {'slug': topic.slug}) }}" class="btn btn-default">{{ 'action.remove'|trans }}</a>
+                        <a href="#" data-href="{{ path('topic_delete', {'slug': topic.slug}) }}" class="btn btn-default" data-toggle="modal" data-target="#confirm-remove" data-modaltitle="{{ 'topic.removing'|trans }}" data-modalbody="{{ 'are.you.sure.you.want.to.remove.this.topic'|trans }}">{{ 'action.remove'|trans }}</a>
                     </div>
                 {% endif %}
             </div>

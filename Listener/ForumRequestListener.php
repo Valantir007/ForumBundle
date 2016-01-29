@@ -4,8 +4,9 @@ namespace Valantir\ForumBundle\Listener;
 
 use Valantir\ForumBundle\Manager\UserManager;
 use Valantir\ForumBundle\Manager\TopicManager;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /**
  * Listener to set readed topic by user
@@ -25,9 +26,14 @@ class ForumRequestListener
     protected $userManager;
 
     /**
-     * @var SecurityContext
+     * @var TokenStorage
      */
-    protected $securityContext;
+    protected $tokenStorage;
+
+    /**
+     * @var AuthorizationChecker
+     */
+    protected $autheorizationChecker;
 
     /**
      * @var array
@@ -41,13 +47,14 @@ class ForumRequestListener
     /**
      * @param TopicManager    $topicManager
      * @param UserManager     $userManager
-     * @param SecurityContext $securityContext
+     * @param TokenStorage $tokenStorage
      */
-    public function __construct(TopicManager $topicManager, UserManager $userManager, SecurityContext $securityContext)
+    public function __construct(TopicManager $topicManager, UserManager $userManager, TokenStorage $tokenStorage, AuthorizationChecker $autheorizationChecker)
     {
         $this->topicManager = $topicManager;
         $this->userManager = $userManager;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
+        $this->autheorizationChecker = $autheorizationChecker;
     }
 
     /**
@@ -61,14 +68,14 @@ class ForumRequestListener
             return;
         }
 
-        $token = $this->securityContext->getToken();
+        $token = $this->tokenStorage->getToken();
 
         $request = $event->getRequest();
         if (isset($this->readedTopicRoutes[$request->get('_route')]) && $token && $user = $token->getUser()) {
             $parameterName = $this->readedTopicRoutes[$request->get('_route')];
 
             $topic = $this->getTopic($request->get('_route'), $parameterName, $request->get($parameterName));
-            if ($this->securityContext->isGranted('ROLE_USER')) {
+            if ($this->autheorizationChecker->isGranted('ROLE_USER')) {
                 if ($topic && $user) {
                     $user->addReadedTopic($topic);
                     $this->userManager->update($user);

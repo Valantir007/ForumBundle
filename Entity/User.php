@@ -39,6 +39,13 @@ abstract class User
      */
     protected $readedTopics;
 
+    /**
+     * PostsVotes by user
+     * 
+     * @var ArrayCollection
+     */
+    protected $postsVotes;
+
     public function __construct()
     {
         parent::__construct();
@@ -46,6 +53,7 @@ abstract class User
         $this->topics = new ArrayCollection();
         $this->posts = new ArrayCollection();
         $this->readedTopics = new ArrayCollection();
+        $this->postsVotes = new ArrayCollection();
     }
 
     /**
@@ -82,6 +90,8 @@ abstract class User
      * Sets collection of forums
      * 
      * @param ArrayCollection $forums
+     * 
+     * @return User
      */
     public function setForums(ArrayCollection $forums)
     {
@@ -106,6 +116,8 @@ abstract class User
      * Set collection of posts
      * 
      * @param ArrayCollection $forums
+     * 
+     * @return User
      */
     public function setPosts(ArrayCollection $posts)
     {
@@ -118,6 +130,8 @@ abstract class User
      * Adds forum to collection of forums
      * 
      * @param Forum $forum
+     * 
+     * @return User
      */
     public function addForum(Forum $forum)
     {
@@ -131,6 +145,8 @@ abstract class User
      * Removes forum from collection of forums
      * 
      * @param Forum $forum
+     * 
+     * @return User
      */
     public function removeForum(Forum $forum)
     {
@@ -143,6 +159,8 @@ abstract class User
      * Adds topic to collection of topics
      * 
      * @param Topic $topic
+     * 
+     * @return User
      */
     public function addTopic(Topic $topic)
     {
@@ -156,6 +174,8 @@ abstract class User
      * Removes topic from collection of topics
      * 
      * @param Topic $topic
+     * 
+     * @return User
      */
     public function removeTopic(Topic $topic)
     {
@@ -168,6 +188,8 @@ abstract class User
      * Adds post to collection of posts
      * 
      * @param Post $post
+     * 
+     * @return User
      */
     public function addPost(Post $post)
     {
@@ -181,6 +203,8 @@ abstract class User
      * Removes post from collection of posts
      * 
      * @param Post $post
+     * 
+     * @return User
      */
     public function removePost(Post $post)
     {
@@ -203,8 +227,10 @@ abstract class User
      * Sets collection of readed topics
      * 
      * @param ArrayCollection $readedTopics
+     * 
+     * @return User
      */
-    public function setReadedTopics($readedTopics)
+    public function setReadedTopics(ArrayCollection $readedTopics)
     {
         $this->readedTopics = $readedTopics;
 
@@ -215,6 +241,8 @@ abstract class User
      * Adds topic to collection of readed topics
      * 
      * @param Topic $readedTopic
+     * 
+     * @return User
      */
     public function addReadedTopic(Topic $readedTopic)
     {
@@ -230,6 +258,8 @@ abstract class User
      * Removes topic from collection of readed topics
      * 
      * @param Topic $readedTopic
+     * 
+     * @return User
      */
     public function removeReadedTopic(Topic $readedTopic)
     {
@@ -238,4 +268,58 @@ abstract class User
         return $this;
     }
 
+    /**
+     * Gets collection of posts votes
+     * 
+     * @return ArrayCollection
+     */
+    public function getPostsVotes()
+    {
+        return $this->postsVotes;
+    }
+
+    /**
+     * Sets collection of posts votes
+     * 
+     * @param ArrayCollection $postVotes
+     * 
+     * @return User
+     */
+    public function setPostsVotes(ArrayCollection $postVotes)
+    {
+        $this->postVotes = $postVotes;
+
+        return $this;
+    }
+
+    /**
+     * Adds post vote to collection
+     * 
+     * @param Topic $readedTopic
+     * 
+     * @return User
+     */
+    public function addPostsVote(PostVote $postVote)
+    {
+        if (!$this->postsVotes->contains($postVote)) {
+            $postVote->addUser($this);
+            $this->postsVotes->add($postVote);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Removes post vote from collection
+     * 
+     * @param PostVote $postVote
+     * 
+     * @return User
+     */
+    public function removePostsVote(PostVote $postVote)
+    {
+        $this->postsVotes->removeElement($postVote);
+
+        return $this;
+    }
 }

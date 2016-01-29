@@ -11,7 +11,6 @@ use Valantir\ForumBundle\Entity\Forum;
  */
 class ForumManager extends BasicManager
 {
-    
     /**
      * Gets all forums by parent
      * 
@@ -22,7 +21,7 @@ class ForumManager extends BasicManager
     public function findForums($parentSlug = null)
     {
         $qb = $this->repository->createQueryBuilder('f');
-        $qb->select('f', 't', 'p.createdAt', 'COUNT(DISTINCT t) as topicsCount', 'COUNT(DISTINCT p) as postsCount')
+        $qb->select('f', 't', 'p.createdAt')
             ->leftJoin('f.topics', 't')
             ->leftJoin('t.posts', 'p')
             ->leftJoin('f.parent', 'fp')
@@ -44,26 +43,63 @@ class ForumManager extends BasicManager
     }
 
     /**
-     * Find Ancestors by root and right
+     * Counts all topics and posts in forums by slug
      * 
-     * @param int $root
-     * @param int $right
+     * @param string $slug
      * 
      * @return array
      */
-    public function findAncestors($root, $right)
+    public function countTopicsAndPosts($slug)
+    {
+        $result = array();
+        $level = $this->getLevelByForumSlug($slug);
+        $qb = $this->repository->createQueryBuilder('f');
+        $qb->select('f.id, fp.id AS parentId, COUNT(DISTINCT t) as topicsCount', 'COUNT(DISTINCT p) as postsCount')
+            ->leftJoin('f.topics', 't')
+            ->leftJoin('f.parent', 'fp')
+            ->leftJoin('t.posts', 'p')
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('f.level', ':firstLevel'),
+                $qb->expr()->eq('f.level', ':secondLevel')
+            ))
+            ->setParameters(array(
+                'firstLevel' => $level,
+                'secondLevel' => $level + 1
+            ));
+
+        $qb->groupBy('f.id')
+            ->orderBy('f.id');
+
+        $query = $qb->getQuery();
+        $tempResult = $query->getResult();
+        foreach ($tempResult as $row) {
+            $result[$row['id']] = $row;
+            if ($row['parentId'] && isset($result[$row['parentId']])) {
+                $result[$row['parentId']]['postsCount'] += $row['postsCount'];
+                $result[$row['parentId']]['topicsCount'] += $row['topicsCount'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Gets level by slug
+     * 
+     * @param string $slug
+     * 
+     * @return integer
+     */
+    public function getLevelByForumSlug($slug)
     {
         $qb = $this->repository->createQueryBuilder('f');
-        $qb->select('f')
-            ->where('f.root = :root')
-            ->andWhere('f.right >= :right')
-            ->setParameters(array(
-                'root' => $root,
-                'right' => $right
-            ))
-            ->orderBy('f.left');
-        $query = $qb->getQuery();
+        $qb->select('f.level')
+            ->where('f.slug = :slug')
+            ->setParameter('slug', $slug);
 
-        return $query->getResult();
+        $query = $qb->getQuery();
+        $result = $query->getOneOrNullResult();
+
+        return (int)$result;
     }
 }

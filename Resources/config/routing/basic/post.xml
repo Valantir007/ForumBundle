@@ -15,4 +15,14 @@
         <default key="_controller">ValantirForumBundle:Post:removePost</default>
         <requirement key="id">\d+</requirement>
     </route>
+
+    <route id="post_vote_up" path="/{id}/up">
+        <default key="_controller">ValantirForumBundle:Post:voteUp</default>
+        <requirement key="id">\d+</requirement>
+    </route>
+
+    <route id="post_vote_down" path="/{id}/down">
+        <default key="_controller">ValantirForumBundle:Post:voteDown</default>
+        <requirement key="id">\d+</requirement>
+    </route>
 </routes>

@@ -1,35 +1,11 @@
 <div class="display-table">
     {% for forumData in forums %}
         {% set forum = forumData[0] %}
-        <div class="row forum-row">
-            <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
-                <a href="{{ path('forum_index', {'slug': forum.slug }) }}">{{ forum.name }}</a>
-                <div class="small">
-                    {{ forum.description }}
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
-                <div>
-                    {{ 'topics.count'|transchoice(forumData.topicsCount) }}
-                </div>
-                <div>
-                    {{ 'posts.count'|transchoice(forumData.postsCount) }}
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-4 forum-col">
-                {% if lastPosts[forum.id] is defined %}
-                    {% trans with {'%author%': lastPosts[forum.id].author.username, '%date%': lastPosts[forum.id].createdAt|date('Y-m-d H:i:s')} %}
-                        last.post.send.by.%author%.on.%date%
-                    {% endtrans %}
-                {% else %}
-                    {{ 'no.posts'|trans }}
-                {% endif %}
-                {% if is_granted('ROLE_FORUM_ADMIN') %}
-                    <div>
-                        <a href="{{ path('forum_delete', {'slug': forum.slug}) }}" class="btn btn-default">{{ 'action.remove'|trans }}</a>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+        {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 'forum': forum, 'lastPosts': lastPosts, 'forumData': forumData, 'counts': counts, 'child': false }) }}
+        {% if forum.children is not empty %}
+            {% for child in forum.children %}
+                {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 'forum': child, 'lastPosts': lastPosts, 'forumData': forumData, 'counts': counts, 'child': true }) }}
+            {% endfor %}
+        {% endif %}
     {% endfor %}
 </div>

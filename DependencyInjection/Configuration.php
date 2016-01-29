@@ -27,14 +27,11 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('parser')
                     ->defaultValue('bb_code_golonka_parser')
-                    ->validate()
-                    ->ifNotInArray(array('bb_code_golonka_parser', 'bb_code_extension_parser'))
-                        ->thenInvalid('Invalid bbcode parser "%s"')
-                    ->end()
                     ->cannotBeEmpty()
                 ->end()
             ->end()
         ;
+        
 
         return $treeBuilder;
     }

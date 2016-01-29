@@ -19,7 +19,7 @@ class PostManager extends BasicManager
     public function getForumsLastPosts(array $forumsIds = array())
     {
         $qb = $this->repository->createQueryBuilder('p');
-        $qb->select('p', 't', 'f', 'u')
+        $qb->select('p')
             ->leftJoin('p.author', 'u')
             ->leftJoin('p.topic', 't')
             ->leftJoin('t.forum', 'f')
@@ -86,6 +86,7 @@ class PostManager extends BasicManager
         $qb = $this->repository->createQueryBuilder('p');
 
         $qb->select('p', 't', 'u')
+            ->leftJoin('p.votes', 'v')
             ->leftJoin('p.author', 'u')
             ->leftJoin('p.topic', 't')
             ->where('t.id = :topicId')
