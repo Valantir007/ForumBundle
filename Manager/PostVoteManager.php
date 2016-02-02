@@ -52,7 +52,7 @@ class PostVoteManager extends BasicManager
         }
 
         $qb = $this->repository->createQueryBuilder('pv');
-        $qb->select('p.id, pv.kind, COUNT(IDENTITY(pv)) AS quantity')
+        $qb->select('p.id, pv.kind, COUNT(p.id) AS quantity')
             ->leftJoin('pv.post', 'p')
             ->where($qb->expr()->in('pv.post',':postsIds'))
             ->setParameters(array(

@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Valantir\ForumBundle\Manager\PostManager;
 use Valantir\ForumBundle\Entity\PostVote;
+use Valantir\ForumBundle\Entity\Post;
 use Knp\Component\Pager\Paginator;
 use \Exception;
 
@@ -146,6 +147,11 @@ class PostController extends Controller
                 throw $this->createNotFoundException(sprintf('Post with id %s does not exists', $id));
             }
 
+            $ownerResult = $this->checkOwner($post);
+            if ($ownerResult) {
+                return $ownerResult;
+            }
+
             $postVote = $this->getPostVoteManager()->findVoteForPost($post->getId(), $this->getUser()->getId());
             if (!$postVote) {
                 $postVote = new PostVote();
@@ -200,6 +206,11 @@ class PostController extends Controller
                 throw $this->createNotFoundException(sprintf('Post with id %s does not exists', $id));
             }
 
+            $ownerResult = $this->checkOwner($post);
+            if ($ownerResult) {
+                return $ownerResult;
+            }
+
             $postVote = $this->getPostVoteManager()->findVoteForPost($post->getId(), $this->getUser()->getId());
             if (!$postVote) {
                 $postVote = new PostVote();
@@ -231,6 +242,33 @@ class PostController extends Controller
         );
         
         return $this->redirect($this->generateUrl('topic_show', array('slug' => $post->getTopic()->getSlug())));
+    }
+
+    /**
+     * Checks logged user is owner of voted post
+     * 
+     * @param Post $post
+     * 
+     * @return JsonResponse|RedirectResponse|null
+     */
+    private function checkOwner(Post $post) {
+        if ($this->getUser()) {
+            if ($post->getAuthor()->getId() == $this->getUser()->getId()) {
+                $message = $this->translator->trans('you.can.not.vote.for.your.posts');
+                $this->addFlash(
+                    'danger',
+                    $message
+                );
+
+                if($this->request->isXmlHttpRequest()) {
+                    return new JsonResponse(array('result' => false, 'message' => $message));
+                }
+
+                return $this->redirect($this->generateUrl('topic_show', array('slug' => $post->getTopic()->getSlug())));
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -19,6 +19,9 @@
         <property name="name">
             <constraint name="NotBlank"/>
         </property>
+        <property name="posts">
+            <constraint name="Valid" />
+        </property>
     </class>
 
     <class name="Valantir\ForumBundle\Entity\Post">

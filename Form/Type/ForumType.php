@@ -39,24 +39,32 @@ class ForumType extends AbstractType
                 'required' => false,
                 'label' => false,
                 'attr' => array(
-                    'placeholder' => 'placeholder.name'
-                )
+                    'placeholder' => 'placeholder.name',
+                    'class' => 'forum-name form-control'
+                ),
             ))
             ->add('description', null, array(
                 'required' => false,
                 'label' => false,
                 'attr' => array(
-                    'placeholder' => 'placeholder.description'
+                    'placeholder' => 'placeholder.description',
+                    'class' => 'forum-description form-control'
                 )
             ))
             ->add('parent', 'entity_hidden', array(
                 'class' => 'Valantir\ForumBundle\Entity\Forum',
                 'data' => $this->getParentEntity(),
                 'data_class' => null,
-                'required' => false
+                'required' => false,
+                'attr' => array (
+                    'class' => 'forum-parent form-control'
+                )
             ))
             ->add('save', 'submit', array(
-                'label' => 'label.save'
+                'label' => 'label.save',
+                'attr' => array(
+                    'class' => 'forum-submit btn btn-default'
+                )
             ))
         ;
     }

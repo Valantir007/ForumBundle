@@ -25,20 +25,25 @@ class TopicType extends AbstractType
                 'required' => false,
                 'label' => false,
                 'attr' => array(
-                    'placeholder' => 'placeholder.name'
+                    'placeholder' => 'placeholder.name',
+                    'class' => 'topic-name form-control'
                 )
             ))
             ->add('description', null, array(
                 'required' => false,
                 'label' => false,
                 'attr' => array(
-                    'placeholder' => 'placeholder.description'
+                    'placeholder' => 'placeholder.description',
+                    'class' => 'topic-description form-control'
                 )
             ))
             ->add('posts', 'collection', array(
                 'entry_type' => 'post_type',
                 'allow_add' => false,
                 'label' => false,
+                'attr' => array(
+                    'class' => 'post-description',
+                ),
                 'options' => array(
                     'label' => false,
                     'data_class' => 'Valantir\ForumBundle\Entity\Post',
@@ -47,7 +52,10 @@ class TopicType extends AbstractType
                 'empty_data' => array(new Post())
             ))
             ->add('save', 'submit', array(
-                'label' => 'label.save'
+                'label' => 'label.save',
+                'attr' => array(
+                    'class' => 'topic-submit btn btn-default'
+                )
             ))
         ;
     }

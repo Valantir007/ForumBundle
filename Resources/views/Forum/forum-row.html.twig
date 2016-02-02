@@ -1,4 +1,4 @@
-<div class="row forum-row {{ child ? 'child-row' }}">
+<div class="row forum-row {{ isChild ? 'child-row' }} {{ forum.root ? 'forum-root' }} {{ 'level-' ~ forum.level }}">
     <div class="col-md-4 forum-col">
         <a href="{{ path('forum_index', {'slug': forum.slug }) }}">{{ forum.name }}</a>
         <div class="small">

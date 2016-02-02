@@ -37,14 +37,17 @@ class PostType extends AbstractType
             'label' => false,
             'required' => false,
             'attr' => array(
-                'class' => 'bb-editor',
+                'class' => 'bb-editor form-control post-description', 
                 'data-locale' => $this->container->get('request')->getLocale()
             )
         ));
 
         if ($options['submit']) {
             $builder->add('save', 'submit', array(
-                'label' => 'label.save'
+                'label' => 'label.save',
+                'attr' => array(
+                    'class' => 'post-submit btn btn-default'
+                )
             ));
         }
     }

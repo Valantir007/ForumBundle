@@ -1,10 +1,22 @@
 <div class="display-table">
     {% for forumData in forums %}
         {% set forum = forumData[0] %}
-        {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 'forum': forum, 'lastPosts': lastPosts, 'forumData': forumData, 'counts': counts, 'child': false }) }}
+        {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 
+            'forum': forum, 
+            'lastPosts': lastPosts, 
+            'forumData': forumData, 
+            'counts': counts, 
+            'isChild': false 
+        }) }}
         {% if forum.children is not empty %}
             {% for child in forum.children %}
-                {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 'forum': child, 'lastPosts': lastPosts, 'forumData': forumData, 'counts': counts, 'child': true }) }}
+                {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 
+                    'forum': child, 
+                    'lastPosts': lastPosts, 
+                    'forumData': forumData, 
+                    'counts': counts, 
+                    'isChild': true 
+                }) }}
             {% endfor %}
         {% endif %}
     {% endfor %}
