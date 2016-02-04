@@ -2,6 +2,8 @@
 
 namespace Valantir\ForumBundle\Manager;
 
+use Doctrine\ORM\Query;
+
 /**
  * Topics manager
  *
@@ -84,5 +86,32 @@ class TopicManager extends BasicManager
         $result = array_map('current', $queryResult);
 
         return $result;
+    }
+
+    /**
+     * Looking for phrase in post name or description and topic name or description
+     * 
+     * @param string $phrase
+     * 
+     * @return Query
+     */
+    public function findWith($phrase)
+    {
+        $qb = $this->repository->createQueryBuilder('t');
+        $qb->select('t', 'p', 'a')
+            ->leftJoin('t.posts', 'p')
+            ->leftJoin('t.author', 'a')
+            ->where($qb->expr()->orX(
+                $qb->expr()->like('t.name', ':phrase'),
+                $qb->expr()->like('t.description', ':phrase'),
+                $qb->expr()->like('p.description', ':phrase')
+            ))
+            ->setParameters(array(
+                'phrase' => '%' . $phrase . '%',
+            ));
+
+        $query = $qb->getQuery();
+
+        return $query;
     }
 }

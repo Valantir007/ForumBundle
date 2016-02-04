@@ -49,10 +49,11 @@ class TopicController extends Controller
     {
         $topicsQuery = $this->getTopicManager()->findTopicsByForum($forumId);
 
+        $perPage = 10;
         $pagination = $this->paginator->paginate(
             $topicsQuery,
             $this->request->query->getInt('page', 1),
-            10,
+            $perPage,
             array('wrap-queries' => true)
         );
 
@@ -71,7 +72,8 @@ class TopicController extends Controller
         return $this->render('ValantirForumBundle:Topic:index.html.twig', array(
             'topics' => $pagination,
             'lastPosts' => $lastPosts,
-            'readedTopics' => $readedTopics
+            'readedTopics' => $readedTopics,
+            'perPage' => $perPage
         ));
     }
 

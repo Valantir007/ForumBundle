@@ -1,7 +1,7 @@
 <h3>{{ posts|first.topic.name }}</h3>
 
 <div class="display-table posts-list-info">
-    <div class="row hidden-xs hidden-sm forum-row">
+    <div class="row hidden-xs hidden-sm forum-row table-row">
         <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
             {{ 'header.author'|trans }}
         </div>
@@ -13,7 +13,7 @@
 
 <div class="display-table posts-list" {{ (scroll) ? 'data-scroll="1"' }}>
     {% for post in posts %}
-        <div class="row forum-row">
+        <div class="row forum-row table-row">
             <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
                 <div class="author small text-center">
                     {% if post.author.avatar %}

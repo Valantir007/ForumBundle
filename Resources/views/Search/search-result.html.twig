@@ -1,0 +1,35 @@
+{% extends 'ValantirForumBundle::base.html.twig' %}
+
+{% block title %}
+    {{ 'search.result'|trans }}
+{% endblock title %}
+
+{% block metadescription %}
+    {{ 'search.result.for.phrase'|trans }}&nbsp;"{{ phrase }}"
+{% endblock metadescription %}
+    
+{% block body %}
+    {% if topics is not defined %}
+        {{ 'no.result'|trans }}
+    {% else %}
+        <div class="row">
+            {% for topic in topics %}
+                {% set escaped = topic.description|bb2html|e %}
+                <div class="col-xs-12">
+                    <div class="search-result">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <a href="{{ path('topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
+                            </div>
+                            <div class="col-lg-4 text-right">
+                                {{ topic.createdAt|date('Y-m-d') }}&nbsp;({{ topic.author.username }})
+                            </div>
+                        </div>
+                        <small class="search-result-description">{{ escaped|length > 50 ? escaped|slice(0,50) ~ '...' : escaped }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        {{ knp_pagination_render(topics, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
+    {% endif %}
+{% endblock body %}

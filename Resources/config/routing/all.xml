@@ -7,4 +7,5 @@
     <import resource="@ValantirForumBundle/Resources/config/routing/basic/forum.xml" prefix="/forum" />
     <import resource="@ValantirForumBundle/Resources/config/routing/basic/topic.xml" prefix="/forum/topic"/>
     <import resource="@ValantirForumBundle/Resources/config/routing/basic/post.xml" prefix="/forum/post" />
+    <import resource="@ValantirForumBundle/Resources/config/routing/basic/search.xml" prefix="/forum/search" />
 </routes>

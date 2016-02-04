@@ -36,7 +36,10 @@ class PostManager extends BasicManager
 
         $result = array();
         foreach ($posts as $post) {
-            $result[$post->getTopic()->getForum()->getId()] = $post;
+            $result[$post->getTopic()->getForum()->getId()] = array(
+                'post' => $post,
+                'count' => $post->getTopic()->getPosts()->count()
+            );
         }
 
         return $result;
@@ -68,7 +71,10 @@ class PostManager extends BasicManager
 
         $result = array();
         foreach ($posts as $post) {
-            $result[$post->getTopic()->getId()] = $post;
+            $result[$post->getTopic()->getId()] = array(
+                'post' => $post,
+                'count' => $post->getTopic()->getPosts()->count()
+            );
         }
 
         return $result;

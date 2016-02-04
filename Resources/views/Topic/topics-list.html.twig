@@ -1,7 +1,7 @@
 <div class="display-table topics-list">
     {% for topicData in topics %}
         {% set topic = topicData[0] %}
-        <div class="row forum-row">
+        <div class="row forum-row table-row">
             <div class="col-xs-12 col-sm-12 col-md-1 forum-col icon">
                 {% set readed = topic.id in readedTopics %}
                 <i class="glyphicon glyphicon-star star-icon {{ readed ? 'disabled' }}" title="{{ readed ? 'topic.readed'|trans : 'topic.not.readed'|trans }}"></i>
@@ -9,9 +9,9 @@
             <div class="col-xs-12 col-sm-12 col-md-5 forum-col">
                 {% set page = (topicData.postsCount/10)|round(0,'ceil') %}
                 {% if page > 1 %}
-                    <a href="{{ path('topic_show', {'slug': topic.slug, 'page': page }) }}">{{ topic.name }}</a>
+                    <a class="topic-name" href="{{ path('topic_show', {'slug': topic.slug, 'page': page }) }}">{{ topic.name }}</a>
                 {% else %}
-                    <a href="{{ path('topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
+                    <a class="topic-name" href="{{ path('topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
                 {% endif %}
                 <div class="small">
                     <div>{{ (topic.description) ? topic.description }}</div>
@@ -24,10 +24,11 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-2 forum-col">
-                {% if lastPosts[topic.id] is defined %}
-                    {% trans with {'%author%': lastPosts[topic.id].author.username, '%date%': lastPosts[topic.id].createdAt|date('Y-m-d H:i:s')} %}
+                {% if lastPosts[topic.id] is defined and lastPosts[topic.id].post is not empty %}
+                    {% trans with {'%author%': lastPosts[topic.id].post.author.username, '%date%': lastPosts[topic.id].post.createdAt|date('Y-m-d H:i:s')} %}
                         last.post.send.by.%author%.on.%date%
                     {% endtrans %}
+                    <a class="last-post" href="{{ path('topic_show', {'slug': lastPosts[topic.id].post.topic.slug, 'page': (lastPosts[topic.id].count/perPage)|round(0,'ceil')}) }}">{{ 'last.post'|trans }}</a>
                 {% else %}
                     {{ 'no.posts'|trans }}
                 {% endif %}

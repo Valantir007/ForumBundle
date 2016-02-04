@@ -1,5 +1,5 @@
 {% if topics %}
-    {{ include('ValantirForumBundle:Topic:topics-list.html.twig', { 'topics': topics, 'readedTopics': readedTopics }) }}
+    {{ include('ValantirForumBundle:Topic:topics-list.html.twig', { 'topics': topics, 'readedTopics': readedTopics, 'perPage': perPage }) }}
     <div class="navigation">
         {{ knp_pagination_render(topics, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
     </div>

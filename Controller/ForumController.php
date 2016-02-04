@@ -64,10 +64,11 @@ class ForumController extends Controller
             $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
         }
 
+        $perPage = 10;
         $pagination = $this->paginator->paginate(
             $this->getForumManager()->findForums(($slug) ? $slug : null), //we create query and pass to paginator
             $this->request->query->getInt('page', 1),
-            10,
+            $perPage,
             array('wrap-queries' => true)
         );
 
@@ -88,6 +89,7 @@ class ForumController extends Controller
             'lastPosts' => $this->getPostManager()->getForumsLastPosts($forumsIds), //gets last post per forum
             'forumId' => ($currentForum) ? $currentForum->getId() : null,
             'counts' => $this->getForumManager()->countTopicsAndPosts($slug), //counts of topics and posts
+            'perPage' => $perPage,
         ));
     }
 

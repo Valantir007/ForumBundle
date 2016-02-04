@@ -1,23 +1,27 @@
-<div class="display-table">
-    {% for forumData in forums %}
+{% for forumData in forums %}
+    <div class="display-table main-forum">
         {% set forum = forumData[0] %}
         {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 
             'forum': forum, 
             'lastPosts': lastPosts, 
             'forumData': forumData, 
             'counts': counts, 
-            'isChild': false 
+            'isChild': false,
+            'perPage': perPage
         }) }}
-        {% if forum.children is not empty %}
+    </div>
+    {% if forum.children is not empty %}
+        <div class="display-table children-forum">
             {% for child in forum.children %}
                 {{ include('ValantirForumBundle:Forum:forum-row.html.twig', { 
                     'forum': child, 
                     'lastPosts': lastPosts, 
                     'forumData': forumData, 
                     'counts': counts, 
-                    'isChild': true 
+                    'isChild': true,
+                    'perPage': perPage
                 }) }}
             {% endfor %}
-        {% endif %}
-    {% endfor %}
-</div>
+        </div>
+    {% endif %}
+{% endfor %}

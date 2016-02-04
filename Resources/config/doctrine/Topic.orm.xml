@@ -15,7 +15,7 @@
         <field name="updatedAt" column="updated_at" type="datetime" nullable="true"/>
         <field name="deletedAt" column="deleted_at" type="datetime" nullable="true" />
         <field name="slug" type="string" length="255" unique="true">
-            <gedmo:slug unique="true" updatable="true" separator="-" fields="name" />
+            <gedmo:slug unique="true" updatable="false" separator="-" fields="name" unique_base="id" />
         </field>
 
         <many-to-one field="author" target-entity="User" inversed-by="topics">

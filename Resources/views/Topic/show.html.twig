@@ -9,15 +9,17 @@
 {% endblock metadescription %}
 
 {% block body %}
-    {% if posts %}
-        {% if posts is not empty %}
-            {{ include('ValantirForumBundle:Post:posts-list.html.twig', { 'posts': posts, 'scroll': scroll, 'votes': votes }) }}
+    <div class="forum-container">
+        {% if posts %}
+            {% if posts is not empty %}
+                {{ include('ValantirForumBundle:Post:posts-list.html.twig', { 'posts': posts, 'scroll': scroll, 'votes': votes }) }}
+            {% endif %}
+            <div class="navigation">
+                {{ knp_pagination_render(posts, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
+            </div>
         {% endif %}
-        <div class="navigation">
-            {{ knp_pagination_render(posts, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
-        </div>
-    {% endif %}
-    {{ include('ValantirForumBundle:Post:post-form.html.twig', { 'form': postForm }) }}
+        {{ include('ValantirForumBundle:Post:post-form.html.twig', { 'form': postForm }) }}
+    </div>
 {% endblock %}
 
 {% block modal %}

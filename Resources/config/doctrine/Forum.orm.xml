@@ -5,9 +5,6 @@
         xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping">
     
     <entity name="Valantir\ForumBundle\Entity\Forum" table="valantir_forum" repository-class="Gedmo\Tree\Entity\Repository\NestedTreeRepository">
-        <indexes>
-            <index name="name_idx" columns="name"/>
-        </indexes>
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO"/>

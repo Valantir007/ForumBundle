@@ -21,6 +21,7 @@
                 {% endfor %}
             {% endfor %}
             {{ breadcrumb() }}
+            {{ render(controller('ValantirForumBundle:Search:searchForm')) }}
             {% block body %}{% endblock body %}
         </div>
         {% block modal %}
