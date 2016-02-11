@@ -48,20 +48,29 @@ class ForumController extends Controller
     public function indexAction($slug = null)
     {
         $currentForum = $this->getForumManager()->findOneBy(array('slug' => $slug));
+        
         $this->get('breadcrumb_service')->generateBreadcrumb($currentForum); //generate breadcrumb
 
         if ($this->isLoggedAsAdmin()) {
             $forum = new Forum();
             $forumForm = $this->createForm('forum_type', $forum);
-            $this->addForum($forumForm, $forum, ($currentForum) ? $currentForum->getId() : null); //call method to add forum
+            $addResult = $this->addForum($forumForm, $forum, ($currentForum) ? $currentForum->getSlug() : null); //call method to add forum
+
+            if ($addResult instanceof RedirectResponse) { //if added correctly or feilure, redirect
+                return $addResult;
+            }
         }
 
         $topicForm = false;
-        if ($this->isLogged()) {
+        if ($this->isLogged() && $currentForum && $currentForum->getParent()) {
             $topic = new Topic();
             $topic->setForum($currentForum);
             $topicForm = $this->createForm('topic_type', $topic);
-            $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getId() : null); //call method to add topic
+            $addResult = $this->addTopic($topicForm, $topic, ($currentForum) ? $currentForum->getSlug() : null); //call method to add topic
+
+            if ($addResult instanceof RedirectResponse) { //if added correctly or feilure, redirect
+                return $addResult;
+            }
         }
 
         $perPage = 10;
@@ -139,16 +148,19 @@ class ForumController extends Controller
      * 
      * @param Form  $forumForm
      * @param Forum $forum
-     * @param int   $parent
+     * @param string   $parentSlug
      * 
      * @return RedirectResponse|null
      */
-    protected function addForum(Form $forumForm, Forum $forum, $parent)
+    protected function addForum(Form $forumForm, Forum $forum, $parentSlug)
     {
         $forumForm->handleRequest($this->request);
         if ($forumForm->isValid()) {
             try {
+                $this->getDoctrine()->getManager()->getFilters()->disable('softdeleteable');
                 $this->getForumManager()->update($forum);
+                $this->getDoctrine()->getManager()->getFilters()->enable('softdeleteable');
+
                 $this->addFlash(
                     'success',
                     $this->translator->trans('forum.has.been.created')
@@ -161,7 +173,7 @@ class ForumController extends Controller
             }
 
             return $this->redirect($this->generateUrl('forum_index', array(
-                'parent' => $parent
+                'slug' => $parentSlug
             )));
         }
 
@@ -173,31 +185,38 @@ class ForumController extends Controller
      * 
      * @param Form  $topicForm
      * @param Topic $topic
-     * @param int   $parent
+     * @param string   $parentSlug
      * 
      * @return RedirectResponse|null
      */
-    protected function addTopic(Form $topicForm, Topic $topic, $parent)
+    protected function addTopic(Form $topicForm, Topic $topic, $parentSlug)
     {
         $topicForm->handleRequest($this->request);
         if ($topicForm->isValid()) {
             try {
+                $this->getDoctrine()->getManager()->getFilters()->disable('softdeleteable');
                 $this->getTopicManager()->update($topic);
+                $this->getDoctrine()->getManager()->getFilters()->enable('softdeleteable');
+
                 $this->addFlash(
                     'success',
                     $this->translator->trans('topic.has.been.created')
                 );
+
+                return $this->redirect($this->generateUrl('topic_show', array(
+                    'slug' => $topic->getSlug()
+                )));
             } catch (Exception $ex) {
                 throw $ex;
                 $this->addFlash(
                     'danger',
                     $this->translator->trans('topic.has.not.been.created')
                 );
-            }
 
-            return $this->redirect($this->generateUrl('forum_index', array(
-                'parent' => $parent
-            )));
+                return $this->redirect($this->generateUrl('forum_index', array(
+                    'slug' => $parentSlug
+                )));
+            }
         }
 
         return;
