@@ -1,11 +1,11 @@
 <div class="row table-row forum-row {{ isChild ? 'child-row' }} {{ forum.root ? 'forum-root' }} {{ 'level-' ~ forum.level }}">
-    <div class="col-md-{{ isChild ? 4 : 12 }} forum-col">
+    <div class="col-md-{{ forum.parent is not null ? 4 : 12 }} forum-col">
         <a class="forum-name" href="{{ path('forum_index', {'slug': forum.slug }) }}">{{ forum.name }}</a>
         <div class="small">
             {{ forum.description }}
         </div>
     </div>
-    {% if isChild %}
+    {% if forum.parent is not null %}
         <div class="col-md-4 forum-col">
             <div>
                 {{ 'topics.count'|transchoice(counts[forum.id].topicsCount) }}
