@@ -2,14 +2,14 @@ action:
     quote: Cytuj
     edit: Edytuj
     remove: Usuń
-    
+
 header:
     author: Autor
     topic: Temat
-    
+
 label:
     save: Wyślij
-    
+
 tab:
     add:
         topic: Dodaj temat
@@ -19,12 +19,16 @@ placeholder:
     name: Nazwa
     description: Opis
 
-no.posts: Brak postów
+no:
+    result: Brak wyników
+    posts: Brak postów
+
 created.by: Dodany przez
 answer: Odpowiedz
 last:
     post: Ostatni post
     post.send.by.%author%.on.%date%: Ostatni post dodany %date% przez %author%
+
 posts.count: '{0}Brak postów|{1}1 post|]1,5[%count% posty|[5,Inf[%count% postów'
 topics.count: '{0}Brak tematów|{1}1 temat|]1,5[%count% tematy|[5,Inf[%count% tematów'
 

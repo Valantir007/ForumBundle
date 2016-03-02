@@ -9,27 +9,31 @@
 {% endblock metadescription %}
     
 {% block body %}
-    {% if topics is not defined %}
-        {{ 'no.result'|trans }}
-    {% else %}
-        <div class="row">
-            {% for topic in topics %}
-                {% set escaped = topic.description|bb2html|e %}
+        {% if topics is not defined or topics is empty %}
+            <div class="row">
                 <div class="col-xs-12">
-                    <div class="search-result">
-                        <div class="row">
-                            <div class="col-lg-8">
-                                <a href="{{ path('topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
+                    {{ 'no.result'|trans }}
+                </div>
+            </div>
+        {% else %}
+            {% for topic in topics %}
+                <div class="row">
+                    {% set escaped = topic.description|bb2html|e %}
+                    <div class="col-xs-12">
+                        <div class="search-result">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <a href="{{ path('topic_show', {'slug': topic.slug}) }}">{{ topic.name }}</a>
+                                </div>
+                                <div class="col-lg-4 text-right">
+                                    {{ topic.createdAt|date('Y-m-d') }}&nbsp;({{ topic.author.username }})
+                                </div>
                             </div>
-                            <div class="col-lg-4 text-right">
-                                {{ topic.createdAt|date('Y-m-d') }}&nbsp;({{ topic.author.username }})
-                            </div>
+                            <small class="search-result-description">{{ escaped|length > 50 ? escaped|slice(0,50) ~ '...' : escaped }}</small>
                         </div>
-                        <small class="search-result-description">{{ escaped|length > 50 ? escaped|slice(0,50) ~ '...' : escaped }}</small>
                     </div>
                 </div>
             {% endfor %}
-        </div>
-        {{ knp_pagination_render(topics, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
-    {% endif %}
+            {{ knp_pagination_render(topics, 'ValantirForumBundle::twitter_bootstrap_pagination.html.twig') }}
+        {% endif %}
 {% endblock body %}
